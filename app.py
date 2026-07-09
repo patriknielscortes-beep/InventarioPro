@@ -1,3 +1,4 @@
+from blueprints.productos import productos
 from flask import Flask
 from config import Config
 from blueprints.auth import auth
@@ -16,6 +17,7 @@ app.register_blueprint(auth)
 app.register_blueprint(dashboard)
 app.register_blueprint(categorias)
 app.register_blueprint(marcas)
+app.register_blueprint(productos)
 
 
 if __name__ == "__main__":

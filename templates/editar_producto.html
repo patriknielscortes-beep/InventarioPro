@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Editar Producto
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<h2 class="mb-4">
+
+✏️ Editar producto
+
+</h2>
+
+
+
+<div class="card shadow">
+
+
+<div class="card-body">
+
+
+<form method="POST"
+action="/productos/actualizar/{{ producto.id }}">
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Nombre producto
+
+</label>
+
+
+<input
+type="text"
+name="nombre"
+class="form-control"
+value="{{ producto.nombre }}"
+required>
+
+
+</div>
+
+
+
+
+<div class="row">
+
+
+<div class="col-md-6 mb-3">
+
+
+<label class="form-label">
+
+Categoría
+
+</label>
+
+
+<select name="categoria_id"
+class="form-select">
+
+
+
+{% for categoria in categorias %}
+
+
+<option value="{{ categoria.id }}"
+{% if categoria.id == producto.categoria_id %}
+selected
+{% endif %}>
+
+{{ categoria.nombre }}
+
+</option>
+
+
+{% endfor %}
+
+
+
+</select>
+
+
+</div>
+
+
+
+
+<div class="col-md-6 mb-3">
+
+
+<label class="form-label">
+
+Marca
+
+</label>
+
+
+<select name="marca_id"
+class="form-select">
+
+
+
+{% for marca in marcas %}
+
+
+<option value="{{ marca.id }}"
+{% if marca.id == producto.marca_id %}
+selected
+{% endif %}>
+
+{{ marca.nombre }}
+
+</option>
+
+
+{% endfor %}
+
+
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="row">
+
+
+<div class="col-md-6 mb-3">
+
+
+<label>
+
+Stock
+
+</label>
+
+
+<input
+type="number"
+name="stock"
+class="form-control"
+value="{{ producto.stock }}">
+
+
+</div>
+
+
+
+<div class="col-md-6 mb-3">
+
+
+<label>
+
+Precio
+
+</label>
+
+
+<input
+type="number"
+name="precio"
+class="form-control"
+value="{{ producto.precio }}">
+
+
+</div>
+
+
+</div>
+
+
+
+
+<button class="btn btn-primary">
+
+Guardar cambios
+
+</button>
+
+
+
+<a href="/productos"
+class="btn btn-secondary">
+
+Cancelar
+
+</a>
+
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

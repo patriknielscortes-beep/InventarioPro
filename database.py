@@ -38,6 +38,28 @@ CREATE TABLE IF NOT EXISTS marcas (
 )
 """)
 
+# ==========================================
+# TABLA PRODUCTOS
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS productos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    categoria_id INTEGER NOT NULL,
+    marca_id INTEGER NOT NULL,
+    stock INTEGER DEFAULT 0,
+    precio REAL DEFAULT 0,
+    estado TEXT DEFAULT 'Activo',
+
+    FOREIGN KEY(categoria_id)
+    REFERENCES categorias(id),
+
+    FOREIGN KEY(marca_id)
+    REFERENCES marcas(id)
+)
+""")
+
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS categorias (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
