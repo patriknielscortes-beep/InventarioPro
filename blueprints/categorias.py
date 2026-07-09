@@ -1,3 +1,4 @@
+from utils.helpers import login_required
 from flask import Blueprint, render_template, request, redirect, url_for
 
 from models.categoria_model import (
@@ -11,11 +12,14 @@ from models.categoria_model import (
 categorias = Blueprint("categorias", __name__)
 
 
+
+
 # ==========================================
 # LISTAR CATEGORIAS
 # ==========================================
 
 @categorias.route("/categorias")
+@login_required
 def lista():
 
     datos = listar_categorias()
