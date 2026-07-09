@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+
+
+{% block titulo %}
+
+Editar Marca
+
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+
+<h2>
+
+✏️ Editar marca
+
+</h2>
+
+
+
+<form method="POST"
+action="/marcas/actualizar/{{ marca.id }}">
+
+
+
+<div class="mb-3">
+
+<label>
+
+Nombre
+
+</label>
+
+
+<input
+type="text"
+name="nombre"
+class="form-control"
+value="{{ marca.nombre }}"
+required>
+
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label>
+
+Descripción
+
+</label>
+
+
+<textarea
+name="descripcion"
+class="form-control">{{ marca.descripcion }}</textarea>
+
+
+</div>
+
+
+
+
+<button class="btn btn-primary">
+
+Guardar cambios
+
+</button>
+
+
+
+<a href="/marcas"
+class="btn btn-secondary">
+
+Cancelar
+
+</a>
+
+
+
+</form>
+
+
+{% endblock %}

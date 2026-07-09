@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Marcas
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<div class="mb-4">
+
+    <h2>
+        🏷️ Marcas
+    </h2>
+
+</div>
+
+
+
+<div class="card shadow mb-4">
+
+
+    <div class="card-header">
+
+        Nueva marca
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <form method="POST" action="/marcas/crear">
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Nombre
+
+                </label>
+
+
+                <input 
+                type="text"
+                name="nombre"
+                class="form-control"
+                placeholder="Ej: Lenovo"
+                required>
+
+            </div>
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Descripción
+
+                </label>
+
+
+                <textarea
+                name="descripcion"
+                class="form-control"
+                placeholder="Descripción de la marca"></textarea>
+
+            </div>
+
+
+
+            <button class="btn btn-primary">
+
+                Guardar marca
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="card shadow">
+
+
+<div class="card-header">
+
+Lista de marcas
+
+</div>
+
+
+
+<div class="card-body">
+
+
+<table class="table table-striped">
+
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Nombre</th>
+
+<th>Descripción</th>
+
+<th>Estado</th>
+
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody>
+
+
+{% for marca in marcas %}
+
+
+<tr>
+
+
+<td>
+
+{{ marca.id }}
+
+</td>
+
+
+
+<td>
+
+{{ marca.nombre }}
+
+</td>
+
+
+
+<td>
+
+{{ marca.descripcion }}
+
+</td>
+
+
+
+<td>
+
+<span class="badge bg-success">
+
+{{ marca.estado }}
+
+</span>
+
+</td>
+
+
+
+<td>
+
+
+<a href="/marcas/editar/{{ marca.id }}"
+class="btn btn-warning btn-sm">
+
+Editar
+
+</a>
+
+
+
+<a href="/marcas/eliminar/{{ marca.id }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('¿Está seguro de eliminar esta marca?')">
+
+Eliminar
+
+</a>
+
+
+</td>
+
+
+</tr>
+
+
+{% else %}
+
+
+<tr>
+
+<td colspan="5" class="text-center">
+
+No existen marcas
+
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

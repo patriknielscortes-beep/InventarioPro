@@ -29,6 +29,14 @@ CREATE TABLE IF NOT EXISTS usuarios (
 # ==========================================
 # TABLA CATEGORIAS
 # ==========================================
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS marcas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    estado TEXT DEFAULT 'Activo'
+)
+""")
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS categorias (
