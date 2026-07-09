@@ -1,49 +1,124 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <title>InventarioPro</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-</head>
-
-<body class="bg-light">
+{% extends "base.html" %}
 
 
-<div class="container mt-5">
+{% block titulo %}
 
-    <div class="card shadow">
+Dashboard
 
-        <div class="card-body text-center">
-
-            <h1>
-                📦 InventarioPro
-            </h1>
-
-            <hr>
-
-            <h3>
-                Bienvenido {{ usuario }}
-            </h3>
-
-            <p>
-                Rol: {{ rol }}
-            </p>
+{% endblock %}
 
 
-            <a href="/logout" class="btn btn-danger">
-                Cerrar sesión
-            </a>
+
+{% block contenido %}
+
+
+<h2 class="mb-4">
+
+    Dashboard
+
+</h2>
+
+
+
+<div class="row">
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow text-center p-3">
+
+
+            <h5>
+                📦 Productos
+            </h5>
+
+
+            <h2>
+                0
+            </h2>
+
 
         </div>
 
+
     </div>
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow text-center p-3">
+
+
+            <h5>
+                📂 Categorías
+            </h5>
+
+
+            <h2>
+                0
+            </h2>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow text-center p-3">
+
+
+            <h5>
+                ⚠ Stock Bajo
+            </h5>
+
+
+            <h2>
+                0
+            </h2>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-3">
+
+
+        <div class="card shadow text-center p-3">
+
+
+            <h5>
+                📥 Movimientos
+            </h5>
+
+
+            <h2>
+                0
+            </h2>
+
+
+        </div>
+
+
+    </div>
+
+
 
 </div>
 
 
-</body>
 
-</html>
+{% endblock %}
