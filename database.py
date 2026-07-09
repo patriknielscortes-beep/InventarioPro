@@ -27,6 +27,20 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 
 # ==========================================
+# TABLA CATEGORIAS
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS categorias (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    estado TEXT DEFAULT 'Activo'
+)
+""")
+
+
+# ==========================================
 # CREAR USUARIO ADMINISTRADOR
 # ==========================================
 
