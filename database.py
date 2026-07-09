@@ -69,6 +69,30 @@ CREATE TABLE IF NOT EXISTS categorias (
 )
 """)
 
+# ==========================================
+# TABLA MOVIMIENTOS
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS movimientos (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    producto_id INTEGER NOT NULL,
+
+    tipo TEXT NOT NULL,
+
+    cantidad INTEGER NOT NULL,
+
+    fecha TEXT NOT NULL,
+
+    usuario TEXT,
+
+    FOREIGN KEY(producto_id)
+    REFERENCES productos(id)
+
+)
+""")
 
 # ==========================================
 # CREAR USUARIO ADMINISTRADOR
