@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Editar Categoría
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<h2>
+✏️ Editar categoría
+</h2>
+
+
+<form method="POST"
+      action="/categorias/actualizar/{{ categoria.id }}">
+
+
+<div class="mb-3">
+
+<label>
+Nombre
+</label>
+
+<input
+type="text"
+name="nombre"
+class="form-control"
+value="{{ categoria.nombre }}"
+required>
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label>
+Descripción
+</label>
+
+<textarea
+name="descripcion"
+class="form-control">{{ categoria.descripcion }}</textarea>
+
+</div>
+
+
+
+<button class="btn btn-primary">
+
+Guardar cambios
+
+</button>
+
+
+<a href="/categorias"
+class="btn btn-secondary">
+
+Cancelar
+
+</a>
+
+
+</form>
+
+
+
+{% endblock %}

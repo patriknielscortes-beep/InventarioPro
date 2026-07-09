@@ -159,13 +159,21 @@ Categorías
                     <td>
 
 
-                        <a href="/categorias/eliminar/{{ categoria.id }}"
-                           class="btn btn-danger btn-sm">
+                        <a href="/categorias/editar/{{ categoria.id }}"
+                        class="btn btn-warning btn-sm">
 
-                            Eliminar
+                        Editar
 
                         </a>
 
+
+                        <a href="/categorias/eliminar/{{ categoria.id }}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('¿Está seguro de eliminar esta categoría?')">
+
+                        Eliminar
+
+                        </a>
 
                     </td>
 
