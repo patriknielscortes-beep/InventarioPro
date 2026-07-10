@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Editar proveedor
+{% endblock %}
+
+{% block contenido %}
+
+<h2 class="mb-4">
+    ✏️ Editar proveedor
+</h2>
+
+<div class="card shadow">
+
+    <div class="card-header">
+        Datos del proveedor
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/proveedores/actualizar/{{ proveedor.id }}">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">Nombre</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="nombre"
+                        value="{{ proveedor.nombre }}"
+                        required>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">RUT</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="rut"
+                        value="{{ proveedor.rut }}">
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">Teléfono</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="telefono"
+                        value="{{ proveedor.telefono }}">
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">Correo</label>
+
+                    <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        value="{{ proveedor.email }}">
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">Dirección</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="direccion"
+                        value="{{ proveedor.direccion }}">
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-success">
+                💾 Guardar cambios
+            </button>
+
+            <a href="/proveedores" class="btn btn-secondary">
+                ↩ Volver
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

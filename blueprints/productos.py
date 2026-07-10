@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect
-
+import os
 from models.producto_model import (
     listar_productos,
+    buscar_productos,
     crear_producto,
     buscar_producto,
     editar_producto,
@@ -26,7 +27,17 @@ productos = Blueprint("productos", __name__)
 @login_required
 def lista():
 
-    datos = listar_productos()
+    buscar = request.args.get("buscar")
+
+
+    if buscar:
+
+        datos = buscar_productos(buscar)
+
+    else:
+
+        datos = listar_productos()
+
 
     categorias = listar_categorias()
 
@@ -59,8 +70,30 @@ def crear():
     precio = request.form["precio"]
 
 
-    print("PRODUCTO RECIBIDO:")
-    print(nombre, categoria_id, marca_id, stock, precio)
+    imagen = request.files.get("imagen")
+
+
+    nombre_imagen = None
+
+
+    if imagen and imagen.filename:
+
+        carpeta = "static/uploads/productos"
+
+        os.makedirs(carpeta, exist_ok=True)
+
+
+        nombre_imagen = imagen.filename
+
+
+        ruta = os.path.join(
+            carpeta,
+            nombre_imagen
+        )
+
+
+        imagen.save(ruta)
+
 
 
     crear_producto(
@@ -68,7 +101,8 @@ def crear():
         categoria_id,
         marca_id,
         stock,
-        precio
+        precio,
+        nombre_imagen
     )
 
 

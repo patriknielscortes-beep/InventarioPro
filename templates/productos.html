@@ -32,7 +32,10 @@ Nuevo producto
 <div class="card-body">
 
 
-<form method="POST" action="/productos/crear">
+<form 
+method="POST" 
+action="/productos/crear"
+enctype="multipart/form-data">
 
 
 
@@ -161,6 +164,21 @@ class="form-control"
 name="stock"
 value="0">
 
+<div class="mb-3">
+
+<label class="form-label">
+📷 Imagen del producto
+</label>
+
+
+<input
+type="file"
+class="form-control"
+name="imagen"
+accept="image/*">
+
+</div>
+
 
 </div>
 
@@ -221,12 +239,32 @@ Lista de productos
 
 </div>
 
+<form method="GET" action="/productos" class="mb-3">
+
+    <div class="input-group">
+
+        <input 
+        type="text"
+        name="buscar"
+        class="form-control"
+        placeholder="Buscar producto, categoría o marca">
+
+        <button class="btn btn-primary">
+
+            🔎 Buscar
+
+        </button>
+
+    </div>
+
+</form>
+
 
 
 <div class="card-body">
 
 
-<table class="table table-striped">
+<table class="table table-striped table-hover align-middle text-center">
 
 
 <thead>
@@ -234,11 +272,13 @@ Lista de productos
 <tr>
 
 <th>ID</th>
+<th>SKU</th>
+<th>Imagen</th>
 <th>Producto</th>
 <th>Categoría</th>
 <th>Marca</th>
 <th>Stock</th>
-<th>Precio</th>
+<th style="width:120px;">Precio</th>
 <th>Acciones</th>
 
 
@@ -260,6 +300,40 @@ Lista de productos
 <td>
 
 {{ producto.id }}
+
+</td>
+
+<td>
+
+{% if producto.sku %}
+
+{{ producto.sku }}
+
+{% else %}
+
+Sin SKU
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if producto.imagen %}
+
+<img 
+src="{{ url_for('static', filename='uploads/productos/' + producto.imagen) }}"
+width="60"
+height="60"
+class="rounded">
+
+{% else %}
+
+<span>
+Sin imagen
+</span>
+
+{% endif %}
 
 </td>
 
@@ -287,23 +361,44 @@ Lista de productos
 
 <td>
 
-{{ producto.stock }}
+{% if producto.stock == 0 %}
+
+<span class="badge bg-danger">
+    🔴 {{ producto.stock }}
+</span>
+
+
+{% elif producto.stock <= 5 %}
+
+<span class="badge bg-warning text-dark">
+    🟡 {{ producto.stock }}
+</span>
+
+
+{% else %}
+
+<span class="badge bg-success">
+    🟢 {{ producto.stock }}
+</span>
+
+
+{% endif %}
 
 </td>
 
 
-<td>
+<td style="white-space: nowrap;">
 
 $ {{ "{:,.0f}".format(producto.precio) }}
 
 </td>
 
-<td>
+<td class="text-nowrap">
 
 <a href="/productos/editar/{{ producto.id }}"
-class="btn btn-warning btn-sm">
+class="btn btn-warning btn-sm me-1">
 
-Editar
+✏️ Editar
 
 </a>
 
@@ -312,10 +407,17 @@ Editar
 class="btn btn-danger btn-sm"
 onclick="return confirm('¿Eliminar producto?')">
 
-Eliminar
+🗑️ Eliminar
 
 </a>
 
+
+<a href="/movimientos/producto/{{ producto.id }}"
+class="btn btn-info btn-sm mt-1">
+
+📊 Movimientos
+
+</a>
 
 </td>
 

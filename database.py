@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS productos (
     marca_id INTEGER NOT NULL,
     stock INTEGER DEFAULT 0,
     precio REAL DEFAULT 0,
+    sku TEXT UNIQUE,
     estado TEXT DEFAULT 'Activo',
 
     FOREIGN KEY(categoria_id)
@@ -95,6 +96,112 @@ CREATE TABLE IF NOT EXISTS movimientos (
 """)
 
 # ==========================================
+# PROVEEDOR
+# ==========================================
+
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS proveedores (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    nombre TEXT NOT NULL,
+
+    rut TEXT,
+
+    telefono TEXT,
+
+    email TEXT,
+
+    direccion TEXT,
+
+    estado TEXT DEFAULT 'Activo'
+
+)
+""")
+
+# ==========================================
+# COMPRAS
+# ==========================================
+
+# ==========================================
+# TABLA COMPRAS
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS compras (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    proveedor_id INTEGER NOT NULL,
+
+    fecha TEXT NOT NULL,
+
+    total REAL DEFAULT 0,
+
+    usuario TEXT,
+
+    FOREIGN KEY(proveedor_id)
+    REFERENCES proveedores(id)
+
+)
+""")
+
+
+# ==========================================
+# CARRO DE COMPRAS
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS detalle_compras (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    compra_id INTEGER NOT NULL,
+
+    producto_id INTEGER NOT NULL,
+
+    cantidad INTEGER NOT NULL,
+
+    precio REAL NOT NULL,
+
+    subtotal REAL NOT NULL,
+
+    FOREIGN KEY(compra_id)
+    REFERENCES compras(id),
+
+    FOREIGN KEY(producto_id)
+    REFERENCES productos(id)
+
+)
+""")
+
+# ==========================================
+# TABLA DETALLE COMPRAS
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS carrito_compras (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    producto_id INTEGER NOT NULL,
+
+    cantidad INTEGER NOT NULL,
+
+    precio REAL NOT NULL,
+
+    subtotal REAL NOT NULL,
+
+    usuario TEXT,
+
+    FOREIGN KEY(producto_id)
+    REFERENCES productos(id)
+
+)
+""")
+
+# ==========================================
 # CREAR USUARIO ADMINISTRADOR
 # ==========================================
 
@@ -125,3 +232,4 @@ conexion.close()
 
 
 print("Base de datos configurada correctamente.")
+

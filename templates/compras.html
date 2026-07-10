@@ -1,0 +1,487 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Compras
+{% endblock %}
+
+
+{% block contenido %}
+
+<h2 class="mb-4">
+    🛒 Compras
+</h2>
+
+
+
+<!-- REGISTRAR PRODUCTO AL CARRITO -->
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-primary text-white">
+        📝 Registrar compra
+    </div>
+
+
+    <div class="card-body">
+
+
+        <form method="POST" action="/compras/carrito/agregar">
+
+
+            <div class="row">
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Proveedor
+                    </label>
+
+
+                    <select name="proveedor_id"
+                            class="form-select"
+                            required>
+
+
+                        {% for proveedor in proveedores %}
+
+                        <option value="{{ proveedor.id }}">
+
+                            {{ proveedor.nombre }}
+
+                        </option>
+
+                        {% endfor %}
+
+
+                    </select>
+
+
+                </div>
+
+
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Producto
+                    </label>
+
+
+                    <select name="producto_id"
+                            class="form-select"
+                            required>
+
+
+                        {% for producto in productos %}
+
+                        <option value="{{ producto.id }}">
+
+                            {{ producto.nombre }}
+
+                        </option>
+
+                        {% endfor %}
+
+
+                    </select>
+
+
+                </div>
+
+
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Cantidad
+                    </label>
+
+
+                    <input
+                    type="number"
+                    name="cantidad"
+                    class="form-control"
+                    min="1"
+                    required>
+
+
+                </div>
+
+
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Precio compra
+                    </label>
+
+
+                    <input
+                    type="number"
+                    name="precio"
+                    class="form-control"
+                    min="0"
+                    required>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <button class="btn btn-primary">
+
+                ➕ Agregar al carrito
+
+            </button>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<!-- CARRITO -->
+
+<div class="card shadow mb-4">
+
+
+    <div class="card-header bg-success text-white">
+
+        🛒 Productos en carrito
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <table class="table table-striped table-hover align-middle">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Producto</th>
+
+                    <th>Cantidad</th>
+
+                    <th>Precio</th>
+
+                    <th>Subtotal</th>
+
+                    <th>Acción</th>
+
+
+                </tr>
+
+
+            </thead>
+
+
+
+            <tbody>
+
+
+            {% for item in carrito %}
+
+
+                <tr>
+
+
+                    <td>
+                        {{ item.producto }}
+                    </td>
+
+
+                    <td>
+                        {{ item.cantidad }}
+                    </td>
+
+
+                    <td>
+                        $ {{ "{:,.0f}".format(item.precio) }}
+                    </td>
+
+
+                    <td>
+                        $ {{ "{:,.0f}".format(item.subtotal) }}
+                    </td>
+
+
+                    <td>
+
+
+                        <a href="/compras/carrito/eliminar/{{ item.id }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar producto del carrito?')">
+
+
+                            🗑️ Eliminar
+
+
+                        </a>
+
+
+                    </td>
+
+
+                </tr>
+
+
+
+            {% else %}
+
+
+                <tr>
+
+                    <td colspan="5"
+                        class="text-center">
+
+                        Carrito vacío
+
+
+                    </td>
+
+
+                </tr>
+
+
+            {% endfor %}
+
+
+
+            </tbody>
+
+
+        </table>
+
+
+
+
+        {% if carrito %}
+
+
+        <form method="POST"
+              action="/compras/confirmar">
+
+
+
+            <label class="form-label">
+
+                Seleccione proveedor para confirmar
+
+            </label>
+
+
+
+            <select name="proveedor_id"
+                    class="form-select mb-3"
+                    required>
+
+
+                {% for proveedor in proveedores %}
+
+
+                <option value="{{ proveedor.id }}">
+
+                    {{ proveedor.nombre }}
+
+                </option>
+
+
+                {% endfor %}
+
+
+            </select>
+
+
+
+
+            <div class="text-end">
+
+
+                <button class="btn btn-success">
+
+                    ✅ Confirmar Compra
+
+                </button>
+
+
+            </div>
+
+
+
+        </form>
+
+
+        {% endif %}
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- HISTORIAL -->
+
+<div class="card shadow">
+
+
+    <div class="card-header bg-dark text-white">
+
+        📋 Historial de compras
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <table class="table table-striped table-hover align-middle">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Proveedor</th>
+
+                    <th>Fecha</th>
+
+                    <th>Total</th>
+
+                    <th>Usuario</th>
+
+                    <th>Acción</th>
+
+
+                </tr>
+
+
+            </thead>
+
+
+
+            <tbody>
+
+
+
+            {% for compra in compras %}
+
+
+
+                <tr>
+
+
+                    <td>
+
+                        {{ compra.id }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ compra.proveedor or "Sin proveedor" }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ compra.fecha }}
+
+                    </td>
+
+
+                    <td>
+
+                        $ {{ "{:,.0f}".format(compra.total) }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ compra.usuario }}
+
+                    </td>
+
+                    <td>
+
+                    <a href="/compras/detalle/{{ compra.id }}"
+                    class="btn btn-info btn-sm">
+
+                    👁️ Ver
+
+                    </a>
+
+                    </td>
+
+
+                </tr>
+
+
+
+            {% else %}
+
+
+                <tr>
+
+                    <td colspan="5"
+                        class="text-center">
+
+                        No existen compras registradas.
+
+
+                    </td>
+
+                </tr>
+
+
+            {% endfor %}
+
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}

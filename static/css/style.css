@@ -54,3 +54,8 @@ body{
     min-height:100vh;
 
 }
+
+.table-nowrap td,
+.table-nowrap th{
+    white-space: nowrap;
+}

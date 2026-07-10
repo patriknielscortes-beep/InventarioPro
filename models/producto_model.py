@@ -56,11 +56,24 @@ def listar_productos():
 # CREAR PRODUCTO
 # ==========================================
 
-def crear_producto(nombre, categoria_id, marca_id, stock, precio):
+def crear_producto(nombre, categoria_id, marca_id, stock, precio, imagen):
 
     conexion = conectar()
 
     cursor = conexion.cursor()
+
+
+    # Generar SKU automático
+
+    cursor.execute("""
+        SELECT COUNT(*) 
+        FROM productos
+    """)
+
+    total = cursor.fetchone()[0] + 1
+
+
+    sku = f"PROD-{total:05d}"
 
 
     cursor.execute("""
@@ -70,25 +83,29 @@ def crear_producto(nombre, categoria_id, marca_id, stock, precio):
             categoria_id,
             marca_id,
             stock,
-            precio
+            precio,
+            sku,
+            imagen
         )
         VALUES
-        (?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?)
     """,
     (
         nombre,
         categoria_id,
         marca_id,
         stock,
-        precio
+        precio,
+        sku,
+        imagen
     ))
 
 
     conexion.commit()
 
     conexion.close()
-    
-    # ==========================================
+
+# ==========================================
 # BUSCAR PRODUCTO
 # ==========================================
 
@@ -164,6 +181,75 @@ def eliminar_producto(id):
     (id,))
 
 
+    conexion.commit()
+
+    conexion.close()
+
+
+
+# ==========================================
+# BUSCAR PRODUCTOS
+# ==========================================
+
+def buscar_productos(texto):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT 
+            productos.*,
+            categorias.nombre AS categoria,
+            marcas.nombre AS marca
+
+        FROM productos
+
+        LEFT JOIN categorias
+        ON productos.categoria_id = categorias.id
+
+        LEFT JOIN marcas
+        ON productos.marca_id = marcas.id
+
+        WHERE productos.nombre LIKE ?
+        OR categorias.nombre LIKE ?
+        OR marcas.nombre LIKE ?
+
+        ORDER BY productos.id DESC
+    """,
+    (
+        "%" + texto + "%",
+        "%" + texto + "%",
+        "%" + texto + "%"
+    ))
+
+    productos = cursor.fetchall()
+
+    conexion.close()
+
+    return productos
+
+
+
+# ==========================================
+# ACTUALIZAR STOCK POR COMPRA
+# ==========================================
+
+def actualizar_stock_compra(producto_id, cantidad):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        UPDATE productos
+        SET stock = stock + ?
+        WHERE id = ?
+    """,
+    (
+        cantidad,
+        producto_id
+    ))
 
     conexion.commit()
 

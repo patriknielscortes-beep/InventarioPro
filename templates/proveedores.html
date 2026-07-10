@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Proveedores
+{% endblock %}
+
+{% block contenido %}
+
+<h2 class="mb-4">
+    🏢 Proveedores
+</h2>
+
+<div class="card shadow mb-4">
+
+    <div class="card-header">
+        Nuevo proveedor
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/proveedores/crear">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text"
+                           name="nombre"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">RUT</label>
+                    <input type="text"
+                           name="rut"
+                           class="form-control">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text"
+                           name="telefono"
+                           class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Correo</label>
+                    <input type="email"
+                           name="email"
+                           class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Dirección</label>
+                    <input type="text"
+                           name="direccion"
+                           class="form-control">
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary">
+                💾 Guardar proveedor
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header">
+        Lista de proveedores
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-striped table-hover align-middle text-center table-nowrap">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Proveedor</th>
+                    <th>RUT</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for proveedor in proveedores %}
+
+                <tr>
+
+                    <td>{{ proveedor.id }}</td>
+                    <td>{{ proveedor.nombre }}</td>
+                    <td>{{ proveedor.rut }}</td>
+                    <td>{{ proveedor.telefono }}</td>
+                    <td>{{ proveedor.email }}</td>
+                    <td>{{ proveedor.direccion }}</td>
+
+                    <td>
+
+                        <div class="d-flex justify-content-center gap-2">
+
+                            <a href="/proveedores/editar/{{ proveedor.id }}"
+                               class="btn btn-warning btn-sm">
+
+                                ✏️ Editar
+
+                            </a>
+
+                            <a href="/proveedores/eliminar/{{ proveedor.id }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Eliminar proveedor?')">
+
+                                🗑️ Eliminar
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="7" class="text-center">
+
+                        No existen proveedores registrados.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

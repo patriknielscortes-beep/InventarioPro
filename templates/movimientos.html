@@ -31,7 +31,7 @@ Movimientos
                         {% for producto in productos %}
 
                         <option value="{{ producto.id }}">
-                            {{ producto.nombre }}
+                            {{ producto.nombre }} (Stock: {{ producto.stock }})
                         </option>
 
                         {% endfor %}
@@ -70,8 +70,8 @@ Movimientos
 
             <br>
 
-            <button class="btn btn-success">
-                Registrar movimiento
+            <button class="btn btn-primary">
+                💾 Guardar movimiento
             </button>
 
         </form>
@@ -88,7 +88,7 @@ Movimientos
 
     <div class="card-body">
 
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover align-middle text-center">
 
             <thead>
 
@@ -121,7 +121,23 @@ Movimientos
                         {% endif %}
                     </td>
 
-                    <td>{{ movimiento.cantidad }}</td>
+                    <td>
+
+                        {% if movimiento.tipo == "Entrada" %}
+
+                        <span class="badge bg-success">
+                            +{{ movimiento.cantidad }}
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+                            -{{ movimiento.cantidad }}
+                        </span>
+
+                        {% endif %}
+
+                    </td>
 
                     <td>{{ movimiento.fecha }}</td>
 

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Detalle compra
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<h2 class="mb-4">
+
+🧾 Detalle compra #{{ compra_id }}
+
+</h2>
+
+
+
+<div class="card shadow">
+
+
+<div class="card-body">
+
+
+<table class="table table-striped">
+
+
+<thead>
+
+<tr>
+
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Precio</th>
+<th>Subtotal</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody>
+
+
+{% for item in detalle %}
+
+
+<tr>
+
+<td>
+{{ item.producto }}
+</td>
+
+
+<td>
+{{ item.cantidad }}
+</td>
+
+
+<td>
+$ {{ "{:,.0f}".format(item.precio) }}
+</td>
+
+
+<td>
+$ {{ "{:,.0f}".format(item.subtotal) }}
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+
+<a href="/compras"
+class="btn btn-secondary">
+
+⬅ Volver
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}
