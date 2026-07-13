@@ -1,5 +1,7 @@
 import sqlite3
-
+import barcode
+from barcode.writer import ImageWriter
+import os
 
 DATABASE = "inventario.db"
 
@@ -51,6 +53,36 @@ def listar_productos():
     return productos
 
 
+# ==========================================
+# GENERAR CODIGO DE BARRAS
+# ==========================================
+
+def generar_codigo_barras(sku):
+
+    carpeta = "static/barcodes"
+
+
+    if not os.path.exists(carpeta):
+        os.makedirs(carpeta)
+
+
+    ruta = os.path.join(
+        carpeta,
+        sku
+    )
+
+
+    codigo = barcode.get(
+        "code128",
+        sku,
+        writer=ImageWriter()
+    )
+
+
+    archivo = codigo.save(ruta)
+
+
+    return archivo
 
 # ==========================================
 # CREAR PRODUCTO
@@ -103,7 +135,36 @@ def crear_producto(nombre, categoria_id, marca_id, stock, precio, imagen):
 
     conexion.commit()
 
+    generar_codigo_barras(sku)
+
     conexion.close()
+
+    # ==========================================
+# OBTENER PRODUCTO POR ID COMPLETO
+# ==========================================
+
+def obtener_producto(id):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT *
+        FROM productos
+        WHERE id = ?
+    """,
+    (id,))
+
+
+    producto = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return producto
 
 # ==========================================
 # BUSCAR PRODUCTO
@@ -229,8 +290,87 @@ def buscar_productos(texto):
 
     return productos
 
+# ==========================================
+# BUSCAR POR SKU
+# ==========================================
+
+def buscar_por_sku(sku):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
 
 
+    cursor.execute("""
+        SELECT
+            productos.*,
+            categorias.nombre AS categoria,
+            marcas.nombre AS marca
+
+        FROM productos
+
+        LEFT JOIN categorias
+        ON productos.categoria_id = categorias.id
+
+        LEFT JOIN marcas
+        ON productos.marca_id = marcas.id
+
+        WHERE productos.sku = ?
+
+    """,
+    (sku,))
+
+
+    producto = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return producto
+
+# ==========================================
+# DESCONTAR STOCK VENTA
+# ==========================================
+
+def actualizar_stock_venta(producto_id, cantidad):
+
+    conexion = conectar()
+    cursor = conexion.cursor()
+
+    cursor.execute(
+        "SELECT nombre, stock FROM productos WHERE id = ?",
+        (producto_id,)
+    )
+
+    producto = cursor.fetchone()
+
+    print("DESCONTANDO STOCK:")
+    print("Producto:", producto["nombre"])
+    print("Stock antes:", producto["stock"])
+    print("Cantidad:", cantidad)
+
+    cursor.execute("""
+        UPDATE productos
+        SET stock = stock - ?
+        WHERE id = ?
+    """,
+    (
+        cantidad,
+        producto_id
+    ))
+
+    cursor.execute(
+        "SELECT stock FROM productos WHERE id = ?",
+        (producto_id,)
+    )
+
+    print("Stock después:", cursor.fetchone()["stock"])
+
+    conexion.commit()
+    conexion.close()
+
+    
 # ==========================================
 # ACTUALIZAR STOCK POR COMPRA
 # ==========================================

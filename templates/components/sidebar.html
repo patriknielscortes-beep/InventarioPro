@@ -1,118 +1,212 @@
-<div class="sidebar">
+<div class="sidebar bg-dark text-white p-3">
 
-    <div class="logo-area">
-        <h3>
-            📦 InventarioPro
-        </h3>
-    </div>
+    <h4 class="text-center mb-4">
+        📦 InventarioPro
+    </h4>
 
 
-    <hr>
+    <ul class="nav flex-column">
 
 
-    <ul class="menu">
+        <!-- DASHBOARD -->
 
-        <li>
-            <a href="/dashboard">
+        <li class="nav-item mb-2">
+
+            <a href="/dashboard"
+               class="nav-link text-white">
+
                 <i class="bi bi-speedometer2"></i>
                 Dashboard
-            </a>
-        </li>
-
-
-        <li>
-            <a href="/productos">
-
-            <i class="bi bi-box-seam"></i>
-
-            Productos
 
             </a>
 
-            <a href="/movimientos">
-            <i class="bi bi-arrow-left-right"></i>
-            Movimientos
-        </a>    
         </li>
 
-        
 
 
-        <li>
-            <a href="/categorias">
+        <!-- ADMINISTRADOR -->
 
-                <i class="bi bi-tags"></i>
+        {% if session["rol"] == "Administrador" %}
 
+
+        <li class="nav-item mb-2">
+
+            <a href="/usuarios"
+               class="nav-link text-white">
+
+                <i class="bi bi-people"></i>
+                Usuarios
+
+            </a>
+
+        </li>
+
+
+        <li class="nav-item mb-2">
+
+            <a href="/productos"
+               class="nav-link text-white">
+
+                <i class="bi bi-box"></i>
+                Productos
+
+            </a>
+
+        </li>
+
+
+        <li class="nav-item mb-2">
+
+            <a href="/movimientos"
+               class="nav-link text-white">
+
+                <i class="bi bi-arrow-left-right"></i>
+                Movimientos
+
+            </a>
+
+        </li>
+
+
+        <li class="nav-item mb-2">
+
+            <a href="/categorias"
+               class="nav-link text-white">
+
+                <i class="bi bi-grid"></i>
                 Categorías
 
             </a>
-        </li>
-
-        <li>
-
-        <a href="/marcas">
-
-        <i class="bi bi-award"></i>
-
-        Marcas
-
-        </a>
 
         </li>
 
 
-       <li>
-            <a href="{{ url_for('proveedores.lista') }}">
+        <li class="nav-item mb-2">
+
+            <a href="/marcas"
+               class="nav-link text-white">
+
+                <i class="bi bi-tags"></i>
+                Marcas
+
+            </a>
+
+        </li>
+
+
+        <li class="nav-item mb-2">
+
+            <a href="/proveedores"
+               class="nav-link text-white">
 
                 <i class="bi bi-truck"></i>
-
                 Proveedores
 
             </a>
+
         </li>
 
 
-       <li>
-            <a href="/compras">
+        <li class="nav-item mb-2">
 
-                <i class="bi bi-cart"></i>
+            <a href="/compras"
+               class="nav-link text-white">
 
+                <i class="bi bi-cart-plus"></i>
                 Compras
 
             </a>
+
         </li>
 
 
-        <li>
-            <a href="#">
-                <i class="bi bi-arrow-up-square"></i>
+        <li class="nav-item mb-2">
+
+            <a href="/salidas"
+               class="nav-link text-white">
+
+                <i class="bi bi-box-arrow-up"></i>
                 Salidas
+
             </a>
+
         </li>
 
 
-        <li>
-            <a href="#">
-                <i class="bi bi-people"></i>
-                Usuarios
+        {% endif %}
+
+
+
+        <!-- ADMINISTRADOR Y VENDEDOR -->
+
+        {% if session["rol"] in ["Administrador", "Vendedor"] %}
+
+
+        <li class="nav-item mb-2">
+
+            <a href="{{ url_for('pos.punto_venta') }}"
+               class="nav-link text-white">
+
+                <i class="bi bi-cart4"></i>
+                Punto de Venta
+
             </a>
+
+        </li>
+
+
+
+        <li class="nav-item mb-2">
+
+            <a href="{{ url_for('ventas.lista') }}"
+               class="nav-link text-white">
+
+                <i class="bi bi-receipt"></i>
+                Ventas
+
+            </a>
+
+        </li>
+
+
+
+        <li class="nav-item mb-2">
+
+            <a href="/clientes"
+               class="nav-link text-white">
+
+                <i class="bi bi-people-fill"></i>
+                Clientes
+
+            </a>
+
+        </li>
+
+
+        {% endif %}
+
+
+
+        <hr>
+
+
+
+        <!-- CERRAR SESION -->
+
+        <li class="nav-item">
+
+            <a href="/logout"
+               class="nav-link text-danger">
+
+                <i class="bi bi-box-arrow-right"></i>
+                Cerrar sesión
+
+            </a>
+
         </li>
 
 
     </ul>
-
-
-    <div class="logout">
-
-        <a href="/logout" class="btn btn-danger w-100">
-
-            <i class="bi bi-box-arrow-right"></i>
-
-            Cerrar sesión
-
-        </a>
-
-    </div>
 
 
 </div>

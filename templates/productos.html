@@ -34,7 +34,7 @@ Nuevo producto
 
 <form 
 method="POST" 
-action="/productos/crear"
+action="{{ url_for('productos.nuevo') }}"
 enctype="multipart/form-data">
 
 
@@ -322,10 +322,11 @@ Sin SKU
 {% if producto.imagen %}
 
 <img 
-src="{{ url_for('static', filename='uploads/productos/' + producto.imagen) }}"
+src="{{ url_for('static', filename='img/productos/' + producto.imagen) }}"
 width="60"
 height="60"
-class="rounded">
+class="rounded"
+style="object-fit: cover;">
 
 {% else %}
 
@@ -411,6 +412,15 @@ onclick="return confirm('¿Eliminar producto?')">
 
 </a>
 
+
+<a href="{{ url_for('productos.barcode_producto', id=producto.id) }}"
+class="btn btn-dark btn-sm">
+
+<i class="bi bi-upc"></i>
+
+Código
+
+</a>
 
 <a href="/movimientos/producto/{{ producto.id }}"
 class="btn btn-info btn-sm mt-1">

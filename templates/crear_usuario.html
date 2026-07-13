@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Nuevo Usuario
+{% endblock %}
+
+{% block contenido %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+                        👤 Crear Nuevo Usuario
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST"
+                          action="/usuarios/guardar">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Nombre completo
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nombre"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Usuario
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="usuario"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Contraseña
+
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Rol
+
+                            </label>
+
+                            <select
+                                name="rol"
+                                class="form-select"
+                                required>
+
+                                <option value="Administrador">
+
+                                    Administrador
+
+                                </option>
+
+                                <option value="Vendedor">
+
+                                    Vendedor
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="text-end">
+
+                            <a href="/usuarios"
+                               class="btn btn-secondary">
+
+                                Cancelar
+
+                            </a>
+
+                            <button
+                                class="btn btn-success">
+
+                                💾 Guardar Usuario
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

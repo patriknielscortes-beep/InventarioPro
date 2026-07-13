@@ -1,0 +1,95 @@
+.producto{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    margin-bottom:8px;
+
+}
+
+.producto:hover{
+
+    transform:translateY(-6px);
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+}
+
+.imagen-producto{
+
+    height:180px;
+    object-fit:cover;
+
+}
+
+.sin-imagen{
+
+    height:180px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:60px;
+    background:#f4f4f4;
+
+}
+
+.precio{
+
+    color:#198754;
+    font-weight:bold;
+}
+
+.sku{
+
+    color:#888;
+    font-size:13px;
+}
+
+.carrito{
+
+    position:sticky;
+    top:20px;
+}
+
+.agregar{
+
+    margin-top:15px;
+}
+
+.resumen{
+
+    width:300px;
+
+    margin-left:auto;
+
+    font-size:18px;
+
+}
+
+
+.resumen div{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:8px;
+
+}
+
+
+.total{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+.nombre{
+
+    width:200px;
+
+}

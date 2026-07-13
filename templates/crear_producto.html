@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="container mt-4">
+
+    <h2>Nuevo Producto</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label>Nombre</label>
+            <input 
+                type="text" 
+                name="nombre" 
+                class="form-control"
+                required>
+        </div>
+
+
+        <div class="mb-3">
+            <label>Categoría ID</label>
+            <input 
+                type="number" 
+                name="categoria_id" 
+                class="form-control"
+                required>
+        </div>
+
+
+        <div class="mb-3">
+            <label>Marca ID</label>
+            <input 
+                type="number" 
+                name="marca_id" 
+                class="form-control"
+                required>
+        </div>
+
+
+        <div class="mb-3">
+            <label>Stock</label>
+            <input 
+                type="number" 
+                name="stock" 
+                class="form-control"
+                required>
+        </div>
+
+
+        <div class="mb-3">
+            <label>Precio</label>
+            <input 
+                type="number" 
+                name="precio" 
+                class="form-control"
+                required>
+        </div>
+
+
+        <div class="mb-3">
+            <label>Imagen</label>
+            <input 
+                type="file"
+                name="imagen"
+                class="form-control">
+        </div>
+
+
+        <button class="btn btn-primary">
+            Guardar Producto
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

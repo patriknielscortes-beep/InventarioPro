@@ -1,217 +1,154 @@
 {% extends "base.html" %}
 
-
 {% block titulo %}
 Editar Producto
 {% endblock %}
 
-
-
 {% block contenido %}
 
-
 <h2 class="mb-4">
-
-✏️ Editar producto
-
+    ✏️ Editar Producto
 </h2>
-
-
 
 <div class="card shadow">
 
+    <div class="card-body">
 
-<div class="card-body">
+        <form method="POST"
+              action="{{ url_for('productos.editar', id=producto.id) }}">
 
+            <div class="mb-3">
 
-<form method="POST"
-action="/productos/actualizar/{{ producto.id }}">
+                <label class="form-label">
+                    Nombre del producto
+                </label>
 
+                <input
+                    type="text"
+                    name="nombre"
+                    class="form-control"
+                    value="{{ producto.nombre }}"
+                    required>
 
+            </div>
 
-<div class="mb-3">
+            <div class="row">
 
-<label class="form-label">
+                <div class="col-md-6 mb-3">
 
-Nombre producto
+                    <label class="form-label">
+                        Categoría
+                    </label>
 
-</label>
+                    <select
+                        name="categoria_id"
+                        class="form-select"
+                        required>
 
+                        {% for categoria in categorias %}
 
-<input
-type="text"
-name="nombre"
-class="form-control"
-value="{{ producto.nombre }}"
-required>
+                        <option
+                            value="{{ categoria.id }}"
+                            {% if categoria.id == producto.categoria_id %}selected{% endif %}>
 
+                            {{ categoria.nombre }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Marca
+                    </label>
+
+                    <select
+                        name="marca_id"
+                        class="form-select"
+                        required>
+
+                        {% for marca in marcas %}
+
+                        <option
+                            value="{{ marca.id }}"
+                            {% if marca.id == producto.marca_id %}selected{% endif %}>
+
+                            {{ marca.nombre }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        name="stock"
+                        class="form-control"
+                        value="{{ producto.stock }}"
+                        min="0"
+                        required>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Precio
+                    </label>
+
+                    <input
+                        type="number"
+                        name="precio"
+                        class="form-control"
+                        value="{{ producto.precio }}"
+                        min="0"
+                        step="0.01"
+                        required>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                <i class="bi bi-check-circle"></i>
+
+                Guardar cambios
+
+            </button>
+
+            <a
+                href="{{ url_for('productos.lista') }}"
+                class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
+
+        </form>
+
+    </div>
 
 </div>
-
-
-
-
-<div class="row">
-
-
-<div class="col-md-6 mb-3">
-
-
-<label class="form-label">
-
-Categoría
-
-</label>
-
-
-<select name="categoria_id"
-class="form-select">
-
-
-
-{% for categoria in categorias %}
-
-
-<option value="{{ categoria.id }}"
-{% if categoria.id == producto.categoria_id %}
-selected
-{% endif %}>
-
-{{ categoria.nombre }}
-
-</option>
-
-
-{% endfor %}
-
-
-
-</select>
-
-
-</div>
-
-
-
-
-<div class="col-md-6 mb-3">
-
-
-<label class="form-label">
-
-Marca
-
-</label>
-
-
-<select name="marca_id"
-class="form-select">
-
-
-
-{% for marca in marcas %}
-
-
-<option value="{{ marca.id }}"
-{% if marca.id == producto.marca_id %}
-selected
-{% endif %}>
-
-{{ marca.nombre }}
-
-</option>
-
-
-{% endfor %}
-
-
-
-</select>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="row">
-
-
-<div class="col-md-6 mb-3">
-
-
-<label>
-
-Stock
-
-</label>
-
-
-<input
-type="number"
-name="stock"
-class="form-control"
-value="{{ producto.stock }}">
-
-
-</div>
-
-
-
-<div class="col-md-6 mb-3">
-
-
-<label>
-
-Precio
-
-</label>
-
-
-<input
-type="number"
-name="precio"
-class="form-control"
-value="{{ producto.precio }}">
-
-
-</div>
-
-
-</div>
-
-
-
-
-<button class="btn btn-primary">
-
-Guardar cambios
-
-</button>
-
-
-
-<a href="/productos"
-class="btn btn-secondary">
-
-Cancelar
-
-</a>
-
-
-
-</form>
-
-
-</div>
-
-
-</div>
-
-
 
 {% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Código de barras
+{% endblock %}
+
+
+
+{% block contenido %}
+
+<a href="{{ url_for('productos.lista') }}" class="btn btn-secondary mb-3">
+    <i class="bi bi-arrow-left"></i>
+    Volver a productos
+</a>
+
+
+<div class="container">
+
+
+<div class="card shadow">
+
+
+<div class="card-body text-center">
+
+
+<h3>
+
+{{ producto.nombre }}
+
+</h3>
+
+
+
+<p>
+
+SKU:
+
+<strong>
+
+{{ producto.sku }}
+
+</strong>
+
+</p>
+
+
+
+<img 
+src="{{ url_for('static', filename='barcodes/' + producto.sku + '.png') }}"
+class="img-fluid"
+style="max-width:350px;">
+
+
+
+<br><br>
+
+
+
+<button onclick="window.print()"
+class="btn btn-primary">
+
+
+<i class="bi bi-printer"></i>
+
+Imprimir
+
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

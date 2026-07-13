@@ -73,7 +73,26 @@
 
 </div>
 
+{% with mensajes = get_flashed_messages(with_categories=true) %}
+    {% if mensajes %}
 
+        {% for categoria, mensaje in mensajes %}
+
+            <div class="alert alert-{{ categoria }} alert-dismissible fade show">
+
+                {{ mensaje }}
+
+                <button
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+{% endwith %}
 
 </body>
 

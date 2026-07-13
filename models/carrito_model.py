@@ -15,7 +15,7 @@ def conectar():
 
 
 # ==========================================
-# LISTAR CARRITO
+# LISTAR CARRITO COMPRAS
 # ==========================================
 
 def listar_carrito(usuario):
@@ -23,6 +23,7 @@ def listar_carrito(usuario):
     conexion = conectar()
 
     cursor = conexion.cursor()
+
 
     cursor.execute("""
         SELECT
@@ -32,7 +33,6 @@ def listar_carrito(usuario):
         FROM carrito_compras
 
         INNER JOIN productos
-
         ON carrito_compras.producto_id = productos.id
 
         WHERE carrito_compras.usuario = ?
@@ -45,14 +45,16 @@ def listar_carrito(usuario):
 
     datos = cursor.fetchall()
 
+
     conexion.close()
+
 
     return datos
 
 
 
 # ==========================================
-# AGREGAR PRODUCTO AL CARRITO
+# AGREGAR AL CARRITO
 # ==========================================
 
 def agregar_carrito(producto_id, cantidad, precio, usuario):
@@ -142,8 +144,10 @@ def vaciar_carrito(usuario):
 
     conexion.close()
 
+
+
 # ==========================================
-# OBTENER TOTAL CARRITO
+# TOTAL CARRITO
 # ==========================================
 
 def obtener_total_carrito(usuario):
@@ -155,8 +159,11 @@ def obtener_total_carrito(usuario):
 
     cursor.execute("""
         SELECT SUM(subtotal) AS total
+
         FROM carrito_compras
+
         WHERE usuario = ?
+
     """,
     (usuario,))
 
@@ -168,6 +175,7 @@ def obtener_total_carrito(usuario):
 
 
     if resultado["total"] is None:
+
         return 0
 
 

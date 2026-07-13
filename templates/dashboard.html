@@ -4,125 +4,131 @@
 Dashboard
 {% endblock %}
 
+
 {% block contenido %}
 
 <h2 class="mb-4">
-    📊 Dashboard
+    📊 Dashboard InventarioPro
 </h2>
 
+
+<!-- =========================
+     TARJETAS PRINCIPALES
+========================== -->
+
 <div class="row g-4">
+
 
     <div class="col-lg-3 col-md-6">
         <div class="card shadow border-0 bg-primary text-white">
             <div class="card-body text-center">
+
                 <h5>📦 Productos</h5>
-                <h1>{{ datos.productos }}</h1>
+
+                <h1>
+                    {{ datos.productos }}
+                </h1>
+
             </div>
         </div>
     </div>
+
+
 
     <div class="col-lg-3 col-md-6">
         <div class="card shadow border-0 bg-success text-white">
             <div class="card-body text-center">
-                <h5>📂 Categorías</h5>
-                <h1>{{ datos.categorias }}</h1>
+
+                <h5>💰 Ventas Hoy</h5>
+
+                <h2>
+                    ${{ "{:,.0f}".format(ventas_dia).replace(",", ".") }}
+                </h2>
+
             </div>
         </div>
     </div>
 
+
+
     <div class="col-lg-3 col-md-6">
-        <div class="card shadow border-0 bg-warning text-dark">
+        <div class="card shadow border-0 bg-dark text-white">
             <div class="card-body text-center">
-                <h5>🏷️ Marcas</h5>
-                <h1>{{ datos.marcas }}</h1>
+
+                <h5>📈 Ventas Mes</h5>
+
+                <h2>
+                    ${{ "{:,.0f}".format(ventas_mes).replace(",", ".") }}
+                </h2>
+
             </div>
         </div>
     </div>
+
+
 
     <div class="col-lg-3 col-md-6">
         <div class="card shadow border-0 bg-danger text-white">
             <div class="card-body text-center">
+
                 <h5>⚠️ Stock Bajo</h5>
-                <h1>{{ datos.stock_bajo }}</h1>
+
+                <h1>
+                    {{ datos.stock_bajo }}
+                </h1>
+
             </div>
         </div>
     </div>
 
+
 </div>
+
+
+
 
 <div class="row mt-4">
 
+
     <div class="col-md-4">
 
-        <div class="card shadow border-0 bg-dark text-white">
+        <div class="card shadow border-0 bg-warning">
 
             <div class="card-body text-center">
 
-                <h5>💰 Valor Inventario</h5>
+                <h5>
+                    📦 Valor Inventario
+                </h5>
+
 
                 <h2>
+
                     ${{ "{:,.0f}".format(valor).replace(",", ".") }}
+
                 </h2>
 
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<hr class="my-4">
-
-<div class="row">
-
-    <div class="col-md-8">
-
-        <div class="card shadow">
-
-            <div class="card-header">
-                📈 Productos por categoría
-            </div>
-
-            <div class="card-body">
-
-                <canvas id="graficoCategorias"></canvas>
-
-                <div class="card shadow mt-4">
-
-                <div class="card-header">
-                    📥 Entradas vs 📤 Salidas
-                </div>
-
-                <div class="card-body">
-
-                    <canvas id="graficoMovimientos"></canvas>
-
-                </div>
-
-            </div>
 
             </div>
 
         </div>
 
     </div>
+
+
 
     <div class="col-md-4">
 
         <div class="card shadow">
 
-            <div class="card-header">
-                👤 Sesión
-            </div>
+            <div class="card-body text-center">
 
-            <div class="card-body">
+                <h5>
+                    📂 Categorías
+                </h5>
 
-                <p><strong>Usuario:</strong> {{ usuario }}</p>
-
-                <p><strong>Rol:</strong> {{ rol }}</p>
-
-                <p><strong>Estado:</strong> <span class="badge bg-success">Activo</span></p>
+                <h1>
+                    {{ datos.categorias }}
+                </h1>
 
             </div>
 
@@ -130,193 +136,497 @@ Dashboard
 
     </div>
 
+
+
+    <div class="col-md-4">
+
+        <div class="card shadow">
+
+            <div class="card-body text-center">
+
+                <h5>
+                    🏷️ Marcas
+                </h5>
+
+                <h1>
+                    {{ datos.marcas }}
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-
-const nombresCategorias = [
-    {% for categoria in categorias %}
-        "{{ categoria[0] }}",
-    {% endfor %}
-];
 
 
-const cantidadProductos = [
-    {% for categoria in categorias %}
-        {{ categoria[1] }},
-    {% endfor %}
-];
 
 
-const ctx = document.getElementById("graficoCategorias");
+
+<hr class="my-4">
 
 
-new Chart(ctx, {
-
-    type: "bar",
-
-    data: {
-
-        labels: nombresCategorias,
-
-        datasets: [
-
-            {
-                label: "Productos",
-
-                data: cantidadProductos
-            }
-
-        ]
-
-    },
 
 
-    options: {
 
-        responsive: true,
-
-        scales: {
-
-            y: {
-
-                beginAtZero: true
-
-            }
-
-        }
-
-    }
-
-});
-
-</script>
-
-<script>
-
-const tiposMovimiento = [
-    {% for movimiento in movimientos %}
-        "{{ movimiento[0] }}",
-    {% endfor %}
-];
+<div class="row">
 
 
-const cantidadesMovimiento = [
-    {% for movimiento in movimientos %}
-        {{ movimiento[1] }},
-    {% endfor %}
-];
+<div class="col-md-8">
 
 
-const ctxMovimientos = document.getElementById("graficoMovimientos");
+<div class="card shadow">
 
 
-new Chart(ctxMovimientos, {
+<div class="card-header">
 
-    type: "pie",
+📈 Productos por categoría
 
-    data: {
+</div>
 
-        labels: tiposMovimiento,
 
-        datasets: [{
+<div class="card-body">
 
-            label: "Cantidad",
+<canvas id="graficoCategorias"></canvas>
 
-            data: cantidadesMovimiento
 
-        }]
+<hr>
 
-    },
 
-    options: {
+<h5>
+📥 Entradas vs 📤 Salidas
+</h5>
 
-        responsive: true
 
-    }
+<canvas id="graficoMovimientos"></canvas>
 
-});
 
-</script>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="col-md-4">
+
+
+<div class="card shadow">
+
+
+<div class="card-header">
+
+👤 Sesión
+
+</div>
+
+
+<div class="card-body">
+
+
+<p>
+<strong>Usuario:</strong>
+{{ usuario }}
+</p>
+
+
+<p>
+<strong>Rol:</strong>
+{{ rol }}
+</p>
+
+
+<span class="badge bg-success">
+Activo
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+     PRODUCTOS MAS VENDIDOS
+========================== -->
+
 
 <div class="card shadow mt-4">
 
-    <div class="card-header bg-danger text-white">
 
-        ⚠️ Productos con stock bajo
+<div class="card-header bg-primary text-white">
 
-    </div>
-
-
-    <div class="card-body">
-
-
-        <table class="table table-striped">
-
-
-            <thead>
-
-                <tr>
-
-                    <th>Producto</th>
-
-                    <th>Stock actual</th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-
-            {% for producto in stock_bajo %}
-
-                <tr>
-
-                    <td>
-                        {{ producto[0] }}
-                    </td>
-
-
-                    <td>
-
-                        <span class="badge bg-danger">
-
-                            {{ producto[1] }}
-
-                        </span>
-
-                    </td>
-
-                </tr>
-
-
-            {% else %}
-
-                <tr>
-
-                    <td colspan="2" class="text-center">
-
-                        ✅ No hay productos con stock bajo
-
-                    </td>
-
-                </tr>
-
-
-            {% endfor %}
-
-
-            </tbody>
-
-
-        </table>
-
-
-    </div>
+🏆 Productos más vendidos
 
 </div>
+
+
+<div class="card-body">
+
+
+<table class="table">
+
+
+<tr>
+
+<th>
+Producto
+</th>
+
+<th>
+Cantidad
+</th>
+
+</tr>
+
+
+
+{% for producto in mas_vendidos %}
+
+<tr>
+
+<td>
+{{ producto[0] }}
+</td>
+
+
+<td>
+
+<span class="badge bg-success">
+
+{{ producto[1] }}
+
+</span>
+
+</td>
+
+
+</tr>
+
+
+{% else %}
+
+<tr>
+
+<td colspan="2" class="text-center">
+
+Sin ventas registradas
+
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+     ULTIMAS VENTAS
+========================== -->
+
+
+<div class="card shadow mt-4">
+
+
+<div class="card-header bg-success text-white">
+
+🧾 Últimas ventas
+
+</div>
+
+
+
+<div class="card-body">
+
+
+<table class="table table-striped">
+
+
+<tr>
+
+<th>
+Folio
+</th>
+
+<th>
+Cliente
+</th>
+
+<th>
+Total
+</th>
+
+<th>
+Fecha
+</th>
+
+
+</tr>
+
+
+
+{% for venta in ultimas %}
+
+
+<tr>
+
+<td>
+{{ venta[1] }}
+</td>
+
+
+<td>
+{{ venta[2] }}
+</td>
+
+
+<td>
+
+${{ "{:,.0f}".format(venta[3]).replace(",", ".") }}
+
+</td>
+
+
+<td>
+{{ venta[4] }}
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+     STOCK BAJO
+========================== -->
+
+
+<div class="card shadow mt-4">
+
+
+<div class="card-header bg-danger text-white">
+
+⚠️ Productos con stock bajo
+
+</div>
+
+
+<div class="card-body">
+
+
+<table class="table table-striped">
+
+
+<tr>
+
+<th>
+Producto
+</th>
+
+<th>
+Stock
+</th>
+
+
+</tr>
+
+
+
+{% for producto in stock_bajo %}
+
+
+<tr>
+
+
+<td>
+{{ producto[0] }}
+</td>
+
+
+<td>
+
+<span class="badge bg-danger">
+
+{{ producto[1] }}
+
+</span>
+
+
+</td>
+
+
+</tr>
+
+
+
+{% else %}
+
+
+<tr>
+
+<td colspan="2" class="text-center">
+
+✅ Stock correcto
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+
+new Chart(
+document.getElementById("graficoCategorias"),
+{
+
+type:"bar",
+
+data:{
+
+labels:[
+
+{% for categoria in categorias %}
+"{{ categoria[0] }}",
+{% endfor %}
+
+],
+
+
+datasets:[{
+
+label:"Productos",
+
+data:[
+
+{% for categoria in categorias %}
+{{ categoria[1] }},
+{% endfor %}
+
+]
+
+}]
+
+}
+
+}
+
+);
+
+
+
+
+
+new Chart(
+document.getElementById("graficoMovimientos"),
+{
+
+type:"pie",
+
+data:{
+
+labels:[
+
+{% for movimiento in movimientos %}
+"{{ movimiento[0] }}",
+{% endfor %}
+
+],
+
+
+datasets:[{
+
+data:[
+
+{% for movimiento in movimientos %}
+{{ movimiento[1] }},
+{% endfor %}
+
+]
+
+}]
+
+}
+
+}
+
+);
+
+
+
+</script>
+
+
 
 {% endblock %}

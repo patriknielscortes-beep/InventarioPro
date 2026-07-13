@@ -8,6 +8,11 @@ from blueprints.marcas import marcas
 from blueprints.movimientos import movimientos
 from blueprints.proveedores import proveedores
 from blueprints.compras import compras
+from blueprints.usuarios import usuarios
+from blueprints.ventas import ventas
+from blueprints.clientes import clientes
+from blueprints.pos import pos
+
 
 
 app = Flask(__name__)
@@ -24,7 +29,10 @@ app.register_blueprint(productos)
 app.register_blueprint(movimientos)
 app.register_blueprint(proveedores)
 app.register_blueprint(compras)
-
+app.register_blueprint(usuarios)
+app.register_blueprint(ventas)
+app.register_blueprint(clientes)
+app.register_blueprint(pos)
 
 if __name__ == "__main__":
     app.run(debug=True)

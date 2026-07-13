@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Clientes
+{% endblock %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+            <i class="bi bi-people-fill"></i>
+            Clientes
+        </h2>
+
+    </div>
+
+
+    <!-- FORMULARIO -->
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+                Nuevo Cliente
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST" action="/clientes/crear">
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nombre"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            RUT
+                        </label>
+
+                        <input
+                            type="text"
+                            name="rut"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="text"
+                            name="telefono"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+
+                        <label class="form-label">
+                            Dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            name="direccion"
+                            class="form-control">
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    <i class="bi bi-plus-circle"></i>
+                    Guardar Cliente
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLA -->
+
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+
+                Lista de Clientes
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nombre</th>
+
+                        <th>RUT</th>
+
+                        <th>Teléfono</th>
+
+                        <th>Email</th>
+
+                        <th>Estado</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for cliente in clientes %}
+
+                    <tr>
+
+                        <td>{{ cliente.id }}</td>
+
+                        <td>{{ cliente.nombre }}</td>
+
+                        <td>{{ cliente.rut }}</td>
+
+                        <td>{{ cliente.telefono }}</td>
+
+                        <td>{{ cliente.email }}</td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                {{ cliente.estado }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a href="/clientes/eliminar/{{ cliente.id }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Eliminar cliente?')">
+
+                                <i class="bi bi-trash"></i>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

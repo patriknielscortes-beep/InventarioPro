@@ -1,20 +1,19 @@
-from flask import Blueprint, render_template, request, redirect
-import os
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+
+from utils.helpers import login_required, role_required
+
+from models.producto_model import obtener_producto
+
+from models.categoria_model import listar_categorias
+from models.marca_model import listar_marcas
+
 from models.producto_model import (
     listar_productos,
-    buscar_productos,
     crear_producto,
     buscar_producto,
     editar_producto,
     eliminar_producto
 )
-
-from models.categoria_model import listar_categorias
-
-from models.marca_model import listar_marcas
-
-from utils.helpers import login_required
-
 
 productos = Blueprint("productos", __name__)
 
@@ -25,19 +24,10 @@ productos = Blueprint("productos", __name__)
 
 @productos.route("/productos")
 @login_required
+@role_required("Administrador", "Vendedor")
 def lista():
 
-    buscar = request.args.get("buscar")
-
-
-    if buscar:
-
-        datos = buscar_productos(buscar)
-
-    else:
-
-        datos = listar_productos()
-
+    productos_lista = listar_productos()
 
     categorias = listar_categorias()
 
@@ -46,123 +36,149 @@ def lista():
 
     return render_template(
         "productos.html",
-        productos=datos,
+        productos=productos_lista,
         categorias=categorias,
         marcas=marcas
     )
+
 
 # ==========================================
 # CREAR PRODUCTO
 # ==========================================
 
-@productos.route("/productos/crear", methods=["POST"])
+@productos.route("/productos/nuevo", methods=["GET", "POST"])
 @login_required
-def crear():
+@role_required("Administrador")
+def nuevo():
 
-    nombre = request.form["nombre"]
+    if request.method == "POST":
 
-    categoria_id = request.form["categoria_id"]
+        nombre = request.form["nombre"]
+        categoria_id = request.form["categoria_id"]
+        marca_id = request.form["marca_id"]
+        stock = request.form["stock"]
+        precio = request.form["precio"]
+        archivo = request.files.get("imagen")
+        imagen = "default.png"
 
-    marca_id = request.form["marca_id"]
+        if archivo and archivo.filename != "":
+            
+            nombre_archivo = archivo.filename
 
-    stock = request.form["stock"]
+            ruta = "static/img/productos/" + nombre_archivo
 
-    precio = request.form["precio"]
+            archivo.save(ruta)
 
-
-    imagen = request.files.get("imagen")
-
-
-    nombre_imagen = None
-
-
-    if imagen and imagen.filename:
-
-        carpeta = "static/uploads/productos"
-
-        os.makedirs(carpeta, exist_ok=True)
+            imagen = nombre_archivo
 
 
-        nombre_imagen = imagen.filename
-
-
-        ruta = os.path.join(
-            carpeta,
-            nombre_imagen
+        crear_producto(
+            nombre,
+            categoria_id,
+            marca_id,
+            stock,
+            precio,
+            imagen
         )
 
 
-        imagen.save(ruta)
+        flash(
+            "Producto creado correctamente",
+            "success"
+        )
 
 
-
-    crear_producto(
-        nombre,
-        categoria_id,
-        marca_id,
-        stock,
-        precio,
-        nombre_imagen
-    )
-
-
-    return redirect("/productos")
-
-# ==========================================
-# FORMULARIO EDITAR PRODUCTO
-# ==========================================
-
-@productos.route("/productos/editar/<int:id>")
-@login_required
-def formulario_editar(id):
-
-    producto = buscar_producto(id)
-
-    categorias = listar_categorias()
-
-    marcas = listar_marcas()
+        return redirect(
+            url_for("productos.lista")
+        )
 
 
     return render_template(
-        "editar_producto.html",
-        producto=producto,
-        categorias=categorias,
-        marcas=marcas
+    "crear_producto.html",
+    categorias=listar_categorias(),
+    marcas=listar_marcas()
     )
 
 
-
 # ==========================================
-# ACTUALIZAR PRODUCTO
+# VER CODIGO DE BARRAS
 # ==========================================
 
-@productos.route("/productos/actualizar/<int:id>", methods=["POST"])
+@productos.route("/productos/barcode/<int:id>")
 @login_required
-def actualizar(id):
+@role_required("Administrador")
+def barcode_producto(id):
 
-    nombre = request.form["nombre"]
-
-    categoria_id = request.form["categoria_id"]
-
-    marca_id = request.form["marca_id"]
-
-    stock = request.form["stock"]
-
-    precio = request.form["precio"]
+    producto = obtener_producto(id)
 
 
-    editar_producto(
-        id,
-        nombre,
-        categoria_id,
-        marca_id,
-        stock,
-        precio
+    return render_template(
+        "barcode.html",
+        producto=producto
     )
 
+# ==========================================
+# EDITAR PRODUCTO
+# ==========================================
 
-    return redirect("/productos")
+@productos.route("/productos/editar/<int:id>", methods=["GET", "POST"])
+@login_required
+@role_required("Administrador")
+def editar(id):
 
+    print("MÉTODO:", request.method)
+    print("ID:", id)
+
+    producto = buscar_producto(id)
+
+    if not producto:
+
+        flash(
+            "Producto no encontrado",
+            "danger"
+        )
+
+        return redirect(
+            url_for("productos.lista")
+        )
+
+
+    if request.method == "POST":
+
+        nombre = request.form["nombre"]
+        categoria_id = request.form["categoria_id"]
+        marca_id = request.form["marca_id"]
+        stock = request.form["stock"]
+        precio = request.form["precio"]
+
+
+        editar_producto(
+            id,
+            nombre,
+            categoria_id,
+            marca_id,
+            stock,
+            precio
+        )
+
+
+        flash(
+            "Producto actualizado correctamente",
+            "success"
+        )
+
+
+        return redirect(
+            url_for("productos.lista")
+        )
+
+
+    return render_template(
+          "editar_producto.html",
+           producto=producto,
+           categorias=listar_categorias(),
+           marcas=listar_marcas(),
+    )
 
 
 # ==========================================
@@ -171,8 +187,18 @@ def actualizar(id):
 
 @productos.route("/productos/eliminar/<int:id>")
 @login_required
+@role_required("Administrador")
 def eliminar(id):
 
     eliminar_producto(id)
 
-    return redirect("/productos")
+
+    flash(
+        "Producto eliminado correctamente",
+        "success"
+    )
+
+
+    return redirect(
+        url_for("productos.lista")
+    )

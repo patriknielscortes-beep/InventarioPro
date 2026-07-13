@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Boleta Nº {{ venta.folio }}</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+
+    background:#eee;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+
+.boleta{
+
+    width:320px;
+
+    margin:20px auto;
+
+    background:white;
+
+    padding:15px;
+
+    font-size:13px;
+
+}
+
+
+
+.centro{
+
+    text-align:center;
+
+}
+
+
+
+.logo{
+
+    width:80px;
+
+}
+
+
+
+.empresa{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+
+
+.linea{
+
+    border-top:1px dashed #000;
+
+    margin:10px 0;
+
+}
+
+
+
+.titulo{
+
+    text-align:center;
+
+    font-weight:bold;
+
+    font-size:15px;
+
+}
+
+
+
+.datos{
+
+    font-size:12px;
+
+}
+
+
+
+.producto{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:6px;
+
+}
+
+
+
+.nombre{
+
+    width:180px;
+
+}
+
+
+
+.total{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    text-align:right;
+
+}
+
+
+
+.qr{
+
+    text-align:center;
+
+    margin-top:15px;
+
+}
+
+
+
+.qr img{
+
+    width:120px;
+
+}
+
+
+
+.botones{
+
+    text-align:center;
+
+    margin-top:20px;
+
+}
+
+
+
+@media print{
+
+
+body{
+
+    background:white;
+
+}
+
+
+.boleta{
+
+    margin:0;
+
+    width:80mm;
+
+}
+
+
+
+.botones{
+
+    display:none;
+
+}
+
+
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+<div class="boleta">
+
+
+<div class="centro">
+
+
+<div class="empresa text-center">
+
+<img
+src="{{ url_for('static', filename='img/logo.png') }}"
+class="logo">
+
+
+<h2>
+{{ empresa.nombre }}
+</h2>
+
+
+<p>
+RUT: {{ empresa.rut }}
+</p>
+
+
+<p>
+{{ empresa.giro }}
+</p>
+
+
+<p>
+{{ empresa.direccion }}
+-
+{{ empresa.comuna }}
+</p>
+
+
+<p>
+{{ empresa.telefono }}
+</p>
+
+
+<p>
+{{ empresa.email }}
+</p>
+
+
+</div>
+
+<div class="linea"></div>
+
+
+
+<div class="titulo">
+
+
+BOLETA DE VENTA
+
+
+</div>
+
+
+<div class="centro">
+
+
+Nº {{ venta.folio }}
+
+
+</div>
+
+
+
+<div class="linea"></div>
+
+
+
+<div class="datos">
+
+
+Fecha:
+
+{{ venta.fecha }}
+
+
+<br>
+
+
+Cliente:
+
+{{ venta.cliente }}
+
+
+<br>
+
+
+Vendedor:
+
+{{ venta.usuario }}
+
+
+</div>
+
+
+
+<div class="linea"></div>
+
+
+
+
+{% for item in detalle %}
+
+
+
+<div class="producto">
+
+    <span class="nombre">
+        {{ item.nombre }}
+        <br>
+        {{ item.cantidad }} x ${{ "{:,.0f}".format(item.precio).replace(",", ".") }}
+    </span>
+
+
+    <span>
+        ${{ "{:,.0f}".format(item.subtotal).replace(",", ".") }}
+    </span>
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+<div class="linea"></div>
+
+
+
+<div class="resumen">
+
+    <div>
+        Neto:
+        <span>
+        ${{ "{:,.0f}".format(venta.neto).replace(",", ".") }}
+        </span>
+    </div>
+
+
+    <div>
+        IVA 19%:
+        <span>
+        ${{ "{:,.0f}".format(venta.iva).replace(",", ".") }}
+        </span>
+    </div>
+
+
+    <hr>
+
+
+    <div class="total">
+
+        TOTAL:
+
+        ${{ "{:,.0f}".format(venta.total).replace(",", ".") }}
+
+    </div>
+
+</div>
+
+
+
+<div class="linea"></div>
+
+
+
+<div class="centro">
+
+
+Forma de pago:
+
+<br>
+
+{{ venta.forma_pago }}
+
+
+</div>
+
+
+
+
+<div class="qr">
+
+
+<img
+src="{{ url_for('static', filename=qr) }}">
+
+
+<br>
+
+
+Escanee para verificar compra
+
+
+</div>
+
+
+
+<div class="linea"></div>
+
+
+
+<div class="centro">
+
+
+Gracias por su compra
+
+
+<br>
+
+
+InventarioPro
+
+
+</div>
+
+
+
+<div class="botones">
+
+
+<button onclick="window.print()">
+
+🖨 Imprimir
+
+</button>
+
+
+<a href="{{ url_for('pos.punto_venta') }}" 
+   class="btn btn-success">
+    <i class="bi bi-cart4"></i>
+    Nueva venta
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+
+</body>
+
+
+</html>

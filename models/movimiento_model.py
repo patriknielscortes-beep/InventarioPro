@@ -54,61 +54,28 @@ def registrar_movimiento(producto_id, tipo, cantidad, usuario):
 
     cursor = conexion.cursor()
 
-    # Obtener stock actual
-    cursor.execute("""
-        SELECT stock
-        FROM productos
-        WHERE id = ?
-    """, (producto_id,))
-
-    producto = cursor.fetchone()
-
-    if producto is None:
-        conexion.close()
-        return False
-
-    stock_actual = producto["stock"]
-
-    if tipo == "Entrada":
-        nuevo_stock = stock_actual + int(cantidad)
-    else:
-        nuevo_stock = stock_actual - int(cantidad)
-
-        if nuevo_stock < 0:
-            conexion.close()
-            return False
-
-    # Actualizar stock
-    cursor.execute("""
-        UPDATE productos
-        SET stock = ?
-        WHERE id = ?
-    """, (nuevo_stock, producto_id))
-
-    # Guardar movimiento
     cursor.execute("""
         INSERT INTO movimientos
         (
             producto_id,
             tipo,
             cantidad,
-            fecha,
-            usuario
+            usuario,
+            fecha
         )
-        VALUES
-        (?, ?, ?, ?, ?)
-    """, (
+        VALUES (?, ?, ?, ?, ?)
+    """,
+    (
         producto_id,
         tipo,
         cantidad,
-        datetime.now().strftime("%d-%m-%Y %H:%M"),
-        usuario
+        usuario,
+        datetime.now().strftime("%d-%m-%Y %H:%M")
     ))
+
 
     conexion.commit()
     conexion.close()
-
-    return True
 
 # ==========================================
 # MOVIMIENTOS POR PRODUCTO

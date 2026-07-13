@@ -1,18 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, session
 
-from models.movimiento_model import registrar_movimiento
-
 from models.compra_model import (
     listar_compras,
     crear_compra,
     agregar_detalle
-)
-
-from models.carrito_model import (
-    listar_carrito,
-    agregar_carrito,
-    eliminar_carrito,
-    vaciar_carrito
 )
 
 from models.carrito_model import (
@@ -27,7 +18,7 @@ from models.proveedor_model import listar_proveedores
 
 from models.producto_model import listar_productos
 
-from utils.helpers import login_required
+from utils.helpers import login_required, role_required
 
 from models.compra_model import detalle_compra
 
@@ -45,6 +36,7 @@ compras = Blueprint("compras", __name__)
 
 @compras.route("/compras")
 @login_required
+@role_required("Administrador")
 def lista():
 
     datos = listar_compras()
@@ -150,6 +142,7 @@ def crear():
 
 @compras.route("/compras/confirmar", methods=["POST"])
 @login_required
+@role_required("Administrador")
 def confirmar():
 
     usuario = session["usuario"]

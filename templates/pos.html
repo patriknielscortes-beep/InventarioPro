@@ -1,0 +1,606 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Punto de Venta
+{% endblock %}
+
+
+{% block contenido %}
+
+<div class="container-fluid">
+
+<div class="card shadow-sm">
+
+<div class="card-body">
+
+
+<h2>
+    <i class="bi bi-cart4"></i>
+    Punto de Venta
+</h2>
+
+
+<hr>
+
+
+
+<div class="row">
+
+
+
+<!-- =========================
+     PRODUCTOS
+========================== -->
+
+
+<div class="col-lg-8">
+
+
+<h4>
+    Productos
+</h4>
+
+
+
+<form method="GET" 
+action="{{ url_for('pos.buscar_productos_pos') }}">
+
+
+<div class="input-group mb-3">
+
+
+<input 
+type="text"
+name="q"
+class="form-control"
+placeholder="🔍 Buscar producto...">
+
+
+<button class="btn btn-primary">
+
+Buscar
+
+</button>
+
+
+</div>
+
+</form>
+
+<form method="GET"
+action="{{ url_for('pos.buscar_sku') }}"
+class="mb-3">
+
+
+<div class="input-group">
+
+
+<input 
+type="text"
+name="sku"
+class="form-control"
+placeholder="📦 Escanear o ingresar SKU">
+
+
+<button class="btn btn-dark">
+
+Buscar SKU
+
+</button>
+
+
+</div>
+
+
+</form>
+
+
+
+<div class="row">
+
+
+
+{% for producto in productos %}
+
+
+
+<div class="col-md-4 mb-3">
+
+
+
+<div class="card h-100 shadow-sm">
+
+
+
+<div class="card-body text-center">
+
+
+
+<img
+src="{{ url_for('static', filename='img/productos/' + producto.imagen) }}"
+class="img-fluid mb-2"
+width="100">
+
+
+
+<h5>
+
+{{ producto.nombre }}
+
+</h5>
+
+
+
+<p>
+
+Stock:
+{{ producto.stock }}
+
+</p>
+
+
+
+<h4>
+
+${{ "{:,.0f}".format(producto.precio).replace(",", ".") }}
+
+</h4>
+
+
+
+
+<form method="POST"
+action="{{ url_for('pos.agregar_carrito_pos') }}">
+
+
+
+<input type="hidden"
+name="producto_id"
+value="{{ producto.id }}">
+
+
+
+<input type="hidden"
+name="precio"
+value="{{ producto.precio }}">
+
+
+
+<input type="hidden"
+name="nombre"
+value="{{ producto.nombre }}">
+
+
+
+<button class="btn btn-primary w-100">
+
+
+<i class="bi bi-cart-plus"></i>
+
+Agregar
+
+
+</button>
+
+
+
+</form>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- =========================
+     CARRITO
+========================== -->
+
+
+<div class="col-lg-4">
+
+
+<div class="card shadow">
+
+
+
+<div class="card-header bg-primary text-white">
+
+
+<i class="bi bi-cart"></i>
+
+Carrito de venta
+
+
+</div>
+
+
+
+
+
+<div class="card-body">
+
+
+
+{% if carrito %}
+
+
+
+
+{% for item in carrito %}
+
+
+
+
+
+<div class="card mb-3 shadow-sm border-0">
+
+
+<div class="card-body">
+
+
+
+<div class="d-flex justify-content-between">
+
+
+
+
+
+<div>
+
+
+<h6 class="fw-bold text-primary">
+
+{{ item.nombre_producto }}
+
+</h6>
+
+
+
+<small>
+
+Cantidad:
+{{ item.cantidad }}
+
+</small>
+
+
+
+<br>
+
+
+<small>
+
+Precio:
+
+${{ "{:,.0f}".format(item.precio).replace(",", ".") }}
+
+</small>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="text-end">
+
+
+<h6 class="fw-bold text-success">
+
+
+${{ "{:,.0f}".format(item.subtotal).replace(",", ".") }}
+
+
+</h6>
+
+
+
+
+
+<div class="btn-group btn-group-sm">
+
+
+
+<a href="{{ url_for('pos.disminuir_carrito_pos', id=item.id) }}"
+class="btn btn-warning">
+
+<i class="bi bi-dash"></i>
+
+</a>
+
+
+
+
+<a href="{{ url_for('pos.aumentar_carrito_pos', id=item.id) }}"
+class="btn btn-success">
+
+<i class="bi bi-plus"></i>
+
+</a>
+
+
+
+
+<a href="{{ url_for('pos.eliminar_carrito_pos', id=item.id) }}"
+class="btn btn-danger">
+
+<i class="bi bi-trash"></i>
+
+</a>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+{% endfor %}
+
+
+
+
+
+<hr>
+
+
+
+<div class="d-flex justify-content-between">
+
+
+<h4>
+
+Total
+
+</h4>
+
+
+<h4 class="text-success fw-bold">
+
+
+${{ "{:,.0f}".format(total).replace(",", ".") }}
+
+
+</h4>
+
+
+</div>
+
+
+
+
+
+<hr>
+
+
+
+<!-- COBRAR -->
+
+
+<form method="POST"
+action="{{ url_for('pos.cobrar') }}">
+
+
+
+
+
+<label class="fw-bold">
+
+Cliente
+
+</label>
+
+
+
+<select
+name="cliente"
+class="form-select mb-3"
+required>
+
+
+
+{% for cliente in clientes %}
+
+
+
+<option value="{{ cliente.nombre }}">
+
+{{ cliente.nombre }}
+
+</option>
+
+
+
+{% endfor %}
+
+
+
+</select>
+
+
+
+
+
+
+
+<label class="fw-bold">
+
+Forma de pago
+
+</label>
+
+
+
+
+<select
+name="forma_pago"
+class="form-select mb-3"
+required>
+
+
+
+
+<option value="Efectivo">
+
+💵 Efectivo
+
+</option>
+
+
+
+
+<option value="Debito">
+
+💳 Débito
+
+</option>
+
+
+
+
+<option value="Credito">
+
+💳 Crédito
+
+</option>
+
+
+
+
+<option value="Transferencia">
+
+🏦 Transferencia
+
+</option>
+
+
+
+</select>
+
+
+
+
+
+
+<button type="submit"
+class="btn btn-success btn-lg w-100">
+
+
+<i class="bi bi-cash-coin"></i>
+
+Cobrar venta
+
+
+</button>
+
+
+
+
+
+</form>
+
+
+
+
+
+
+{% else %}
+
+
+
+<div class="alert alert-secondary text-center">
+
+🛒 Carrito vacío
+
+</div>
+
+
+
+{% endif %}
+
+
+
+
+<hr>
+
+
+
+
+<a href="{{ url_for('ventas.lista') }}"
+class="btn btn-outline-primary w-100">
+
+
+<i class="bi bi-receipt"></i>
+
+Historial ventas
+
+
+</a>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+{% endblock %}
