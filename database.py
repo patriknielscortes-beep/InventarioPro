@@ -3,8 +3,11 @@ from werkzeug.security import generate_password_hash
 
 DATABASE = "inventario.db"
 
+
 conexion = sqlite3.connect(DATABASE)
+
 cursor = conexion.cursor()
+
 
 # ==========================================
 # TABLA USUARIOS
@@ -12,14 +15,22 @@ cursor = conexion.cursor()
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS usuarios (
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
     nombre TEXT NOT NULL,
+
     usuario TEXT UNIQUE NOT NULL,
+
     password TEXT NOT NULL,
+
     rol TEXT NOT NULL,
+
     foto TEXT DEFAULT 'default.png'
+
 )
 """)
+
 
 # ==========================================
 # TABLA CATEGORIAS
@@ -27,12 +38,18 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS categorias (
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
     nombre TEXT NOT NULL,
+
     descripcion TEXT,
+
     estado TEXT DEFAULT 'Activo'
+
 )
 """)
+
 
 # ==========================================
 # TABLA MARCAS
@@ -40,12 +57,18 @@ CREATE TABLE IF NOT EXISTS categorias (
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS marcas (
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
     nombre TEXT NOT NULL,
+
     descripcion TEXT,
+
     estado TEXT DEFAULT 'Activo'
+
 )
 """)
+
 
 # ==========================================
 # TABLA PRODUCTOS
@@ -53,14 +76,23 @@ CREATE TABLE IF NOT EXISTS marcas (
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS productos (
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
     nombre TEXT NOT NULL,
+
     categoria_id INTEGER NOT NULL,
+
     marca_id INTEGER NOT NULL,
+
     stock INTEGER DEFAULT 0,
+
     precio REAL DEFAULT 0,
+
     sku TEXT UNIQUE,
+
     estado TEXT DEFAULT 'Activo',
+
     imagen TEXT,
 
     FOREIGN KEY(categoria_id)
@@ -68,8 +100,10 @@ CREATE TABLE IF NOT EXISTS productos (
 
     FOREIGN KEY(marca_id)
         REFERENCES marcas(id)
+
 )
 """)
+
 
 # ==========================================
 # TABLA MOVIMIENTOS
@@ -96,6 +130,7 @@ CREATE TABLE IF NOT EXISTS movimientos (
 )
 """)
 
+
 # ==========================================
 # TABLA PROVEEDORES
 # ==========================================
@@ -120,6 +155,7 @@ CREATE TABLE IF NOT EXISTS proveedores (
 )
 """)
 
+
 # ==========================================
 # TABLA COMPRAS
 # ==========================================
@@ -143,8 +179,9 @@ CREATE TABLE IF NOT EXISTS compras (
 )
 """)
 
+
 # ==========================================
-# TABLA DETALLE COMPRAS
+# DETALLE COMPRAS
 # ==========================================
 
 cursor.execute("""
@@ -160,19 +197,14 @@ CREATE TABLE IF NOT EXISTS detalle_compras (
 
     precio REAL NOT NULL,
 
-    subtotal REAL NOT NULL,
-
-    FOREIGN KEY(compra_id)
-        REFERENCES compras(id),
-
-    FOREIGN KEY(producto_id)
-        REFERENCES productos(id)
+    subtotal REAL NOT NULL
 
 )
 """)
 
+
 # ==========================================
-# TABLA CARRITO COMPRAS
+# CARRITO COMPRAS
 # ==========================================
 
 cursor.execute("""
@@ -188,13 +220,11 @@ CREATE TABLE IF NOT EXISTS carrito_compras (
 
     subtotal REAL NOT NULL,
 
-    usuario TEXT,
-
-    FOREIGN KEY(producto_id)
-        REFERENCES productos(id)
+    usuario TEXT
 
 )
 """)
+
 
 # ==========================================
 # TABLA VENTAS
@@ -211,13 +241,16 @@ CREATE TABLE IF NOT EXISTS ventas (
 
     total REAL DEFAULT 0,
 
-    usuario TEXT NOT NULL
+    usuario TEXT NOT NULL,
+
+    forma_pago TEXT
 
 )
 """)
 
+
 # ==========================================
-# TABLA DETALLE VENTAS
+# DETALLE VENTAS
 # ==========================================
 
 cursor.execute("""
@@ -233,19 +266,14 @@ CREATE TABLE IF NOT EXISTS detalle_ventas (
 
     precio REAL NOT NULL,
 
-    subtotal REAL NOT NULL,
-
-    FOREIGN KEY(venta_id)
-        REFERENCES ventas(id),
-
-    FOREIGN KEY(producto_id)
-        REFERENCES productos(id)
+    subtotal REAL NOT NULL
 
 )
 """)
 
+
 # ==========================================
-# TABLA CARRITO VENTAS
+# CARRITO VENTAS
 # ==========================================
 
 cursor.execute("""
@@ -261,16 +289,14 @@ CREATE TABLE IF NOT EXISTS carrito_ventas (
 
     subtotal REAL NOT NULL,
 
-    usuario TEXT,
-
-    FOREIGN KEY(producto_id)
-        REFERENCES productos(id)
+    usuario TEXT
 
 )
 """)
 
+
 # ==========================================
-# TABLA CLIENTES
+# CLIENTES
 # ==========================================
 
 cursor.execute("""
@@ -292,62 +318,10 @@ CREATE TABLE IF NOT EXISTS clientes (
 
 )
 """)
+
+
 # ==========================================
-# CREAR USUARIO ADMINISTRADOR
-# ==========================================
-
-CREATE TABLE IF NOT EXISTS empresa (
-
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    nombre TEXT NOT NULL,
-
-    rut TEXT,
-
-    giro TEXT,
-
-    direccion TEXT,
-
-    comuna TEXT,
-
-    telefono TEXT,
-
-    email TEXT
-
-);
-# ==========================================
-# DATOS CHILENO
-# ==========================================
-
-CREATE TABLE IF NOT EXISTS empresa (
-
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    nombre TEXT NOT NULL,
-
-    rut TEXT,
-
-    giro TEXT,
-
-    direccion TEXT,
-
-    comuna TEXT,
-
-    telefono TEXT,
-
-    email TEXT
-
-);
-
-cursor.execute("""
-INSERT OR IGNORE INTO empresa
-(
-id,
-nombre,
-rut,# 
-)
-==========================================
-# TABLA EMPRESA
+# EMPRESA
 # ==========================================
 
 cursor.execute("""
@@ -372,10 +346,6 @@ CREATE TABLE IF NOT EXISTS empresa (
 )
 """)
 
-
-# ==========================================
-# DATOS EMPRESA
-# ==========================================
 
 cursor.execute("""
 INSERT OR IGNORE INTO empresa
@@ -402,11 +372,34 @@ VALUES
 )
 """)
 
+
 # ==========================================
-# CREAR USUARIO ADMINISTRADOR
+# AUDITORIA
+# ==========================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS auditoria (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    usuario TEXT NOT NULL,
+
+    modulo TEXT NOT NULL,
+
+    accion TEXT NOT NULL,
+
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+)
+""")
+
+
+# ==========================================
+# USUARIO ADMIN
 # ==========================================
 
 password = generate_password_hash("admin123")
+
 
 cursor.execute("""
 INSERT OR IGNORE INTO usuarios
@@ -423,9 +416,15 @@ VALUES
     ?,
     'Administrador'
 )
-""", (password,))
+""",
+(
+    password,
+))
+
 
 conexion.commit()
+
 conexion.close()
+
 
 print("✅ Base de datos configurada correctamente.")
