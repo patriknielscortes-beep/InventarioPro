@@ -138,7 +138,6 @@ body{
 }
 
 
-
 .qr img{
 
     width:120px;
@@ -204,16 +203,15 @@ body{
 <div class="centro">
 
 
-<div class="empresa text-center">
+<div class="empresa centro">
 
-<img
+<img 
 src="{{ url_for('static', filename='img/logo.png') }}"
 class="logo">
 
-
-<h2>
-{{ empresa.nombre }}
-</h2>
+<div class="nombre-empresa">
+    {{ empresa.nombre }}
+</div>
 
 
 <p>
@@ -248,25 +246,17 @@ RUT: {{ empresa.rut }}
 <div class="linea"></div>
 
 
-
 <div class="titulo">
 
+BOLETA ELECTRÓNICA
 
-BOLETA DE VENTA
+<br>
 
-
-</div>
-
-
-<div class="centro">
-
-
+<span class="numero-boleta">
 Nº {{ venta.folio }}
-
+</span>
 
 </div>
-
-
 
 <div class="linea"></div>
 
@@ -277,8 +267,13 @@ Nº {{ venta.folio }}
 
 Fecha:
 
-{{ venta.fecha }}
+{{ venta.fecha[8:10] }}-{{ venta.fecha[5:7] }}-{{ venta.fecha[0:4] }}
 
+<br>
+
+Hora:
+
+{{ venta.fecha[11:16] }}
 
 <br>
 
@@ -296,6 +291,25 @@ Vendedor:
 {{ venta.usuario }}
 
 
+<br>
+
+
+Estado:
+
+{% if venta.estado == "Anulada" %}
+
+<span style="color:red;">
+ANULADA
+</span>
+
+{% else %}
+
+<span>
+PAGADA
+</span>
+
+{% endif %}
+
 </div>
 
 
@@ -309,17 +323,20 @@ Vendedor:
 
 
 
-<div class="producto">
+<div class="producto linea-producto">
 
     <span class="nombre">
         {{ item.nombre }}
         <br>
-        {{ item.cantidad }} x ${{ "{:,.0f}".format(item.precio).replace(",", ".") }}
+        {{ item.cantidad }} x 
+        ${{ "{:,.0f}".format(item.precio).replace(",", ".") }}
     </span>
 
 
     <span>
+        <b>
         ${{ "{:,.0f}".format(item.subtotal).replace(",", ".") }}
+        </b>
     </span>
 
 </div>
@@ -378,29 +395,46 @@ Forma de pago:
 
 <br>
 
-{{ venta.forma_pago }}
+{{ venta.forma_pago or "No informado" }}
 
 
 </div>
 
-
-
-
 <div class="qr">
-
 
 <img
 src="{{ url_for('static', filename=qr) }}">
 
-
 <br>
-
 
 Escanee para verificar compra
 
 
+<br><br>
+
+
+<div class="timbre">
+
+<b>
+Timbre Electrónico SII
+</b>
+
+<br>
+
+Res. Ex. Nº 80 de 2014
+
+<br>
+
+Verifique documento en:
+
+<br>
+
+www.sii.cl
+
 </div>
 
+
+</div>
 
 
 <div class="linea"></div>
@@ -422,30 +456,37 @@ InventarioPro
 </div>
 
 
+{% if not pdf %}
 
 <div class="botones">
 
-
 <button onclick="window.print()">
-
 🖨 Imprimir
-
 </button>
 
 
-<a href="{{ url_for('pos.punto_venta') }}" 
-   class="btn btn-success">
-    <i class="bi bi-cart4"></i>
-    Nueva venta
+<a href="{{ url_for('ventas.pdf_boleta', id=venta.id) }}"
+class="btn btn-danger">
+
+<i class="bi bi-file-earmark-pdf"></i>
+PDF
+
 </a>
 
 
+<a href="{{ url_for('pos.punto_venta') }}" 
+class="btn btn-success">
+
+<i class="bi bi-cart4"></i>
+Nueva venta
+
+</a>
+
 </div>
-
+{% endif %}
 
 
 </div>
-
 
 
 </body>

@@ -4,6 +4,10 @@ import sqlite3
 DATABASE = "inventario.db"
 
 
+# ==========================================
+# CONEXIÓN
+# ==========================================
+
 def conectar():
 
     conexion = sqlite3.connect(DATABASE)
@@ -15,7 +19,7 @@ def conectar():
 
 
 # ==========================================
-# LISTAR CARRITO COMPRAS
+# LISTAR CARRITO VENTAS
 # ==========================================
 
 def listar_carrito(usuario):
@@ -27,17 +31,27 @@ def listar_carrito(usuario):
 
     cursor.execute("""
         SELECT
-            carrito_compras.*,
-            productos.nombre AS producto
 
-        FROM carrito_compras
+            carrito_ventas.id,
+
+            productos.nombre AS producto,
+
+            carrito_ventas.cantidad,
+
+            carrito_ventas.precio,
+
+            carrito_ventas.subtotal
+
+
+        FROM carrito_ventas
+
 
         INNER JOIN productos
-        ON carrito_compras.producto_id = productos.id
 
-        WHERE carrito_compras.usuario = ?
+        ON productos.id = carrito_ventas.producto_id
 
-        ORDER BY carrito_compras.id DESC
+
+        WHERE carrito_ventas.usuario = ?
 
     """,
     (usuario,))
@@ -67,8 +81,9 @@ def agregar_carrito(producto_id, cantidad, precio, usuario):
     subtotal = int(cantidad) * float(precio)
 
 
+
     cursor.execute("""
-        INSERT INTO carrito_compras
+        INSERT INTO carrito_ventas
         (
             producto_id,
             cantidad,
@@ -77,8 +92,7 @@ def agregar_carrito(producto_id, cantidad, precio, usuario):
             usuario
         )
 
-        VALUES
-        (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?)
 
     """,
     (
@@ -88,6 +102,7 @@ def agregar_carrito(producto_id, cantidad, precio, usuario):
         subtotal,
         usuario
     ))
+
 
 
     conexion.commit()
@@ -108,7 +123,8 @@ def eliminar_carrito(id):
 
 
     cursor.execute("""
-        DELETE FROM carrito_compras
+        DELETE FROM carrito_ventas
+
         WHERE id = ?
 
     """,
@@ -133,7 +149,8 @@ def vaciar_carrito(usuario):
 
 
     cursor.execute("""
-        DELETE FROM carrito_compras
+        DELETE FROM carrito_ventas
+
         WHERE usuario = ?
 
     """,
@@ -160,7 +177,7 @@ def obtener_total_carrito(usuario):
     cursor.execute("""
         SELECT SUM(subtotal) AS total
 
-        FROM carrito_compras
+        FROM carrito_ventas
 
         WHERE usuario = ?
 
@@ -172,6 +189,7 @@ def obtener_total_carrito(usuario):
 
 
     conexion.close()
+
 
 
     if resultado["total"] is None:

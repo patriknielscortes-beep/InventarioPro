@@ -27,35 +27,53 @@ Ventas
 
 
         <form method="POST"
-              action="/ventas/carrito/agregar">
+              action="{{ url_for('ventas.agregar') }}">
 
 
-            <div class="row">
+            <div class="row align-items-end">
 
 
-                <div class="col-md-4 mb-3">
+                <!-- PRODUCTO -->
+
+                <div class="col-md-5 mb-3">
+
 
                     <label class="form-label">
                         Producto
                     </label>
 
 
-                    <select name="producto_id"
-                            class="form-select"
-                            required>
+                    <input 
+                    type="text"
+                    id="buscarProducto"
+                    class="form-control mb-2"
+                    placeholder="🔎 Buscar producto...">
 
 
-                        {% for producto in productos %}
+                    <select 
+                    name="producto_id"
+                    id="listaProductos"
+                    class="form-select"
+                    required>
 
-                        <option value="{{ producto.id }}">
 
-                            {{ producto.nombre }}
-                            |
-                            Stock: {{ producto.stock }}
+                    {% for producto in productos %}
 
-                        </option>
 
-                        {% endfor %}
+                    <option
+                    value="{{ producto.id }}"
+                    data-nombre="{{ producto.nombre|lower }}"
+                    data-precio="{{ producto.precio }}">
+
+
+                    {{ producto.nombre }}
+                    | Stock: {{ producto.stock }}
+
+
+                    </option>
+
+
+                    {% endfor %}
 
 
                     </select>
@@ -65,7 +83,10 @@ Ventas
 
 
 
+                <!-- CANTIDAD -->
+
                 <div class="col-md-2 mb-3">
+
 
                     <label class="form-label">
                         Cantidad
@@ -76,6 +97,7 @@ Ventas
                     type="number"
                     name="cantidad"
                     class="form-control"
+                    value="1"
                     min="1"
                     required>
 
@@ -84,15 +106,19 @@ Ventas
 
 
 
-                <div class="col-md-3 mb-3">
+                <!-- PRECIO -->
+
+                <div class="col-md-2 mb-3">
+
 
                     <label class="form-label">
-                        Precio venta
+                        Precio
                     </label>
 
 
                     <input
                     type="number"
+                    id="precio"
                     name="precio"
                     class="form-control"
                     min="0"
@@ -103,17 +129,25 @@ Ventas
 
 
 
-                <div class="col-md-3 d-flex align-items-end mb-3">
+                <!-- BOTON -->
+
+                <div class="col-md-3 mb-3">
 
 
-                    <button class="btn btn-primary w-100">
+                    <button
+                    class="btn btn-primary w-100">
 
-                        ➕ Agregar producto
+
+                    <i class="bi bi-cart-plus"></i>
+
+                    Agregar producto
+
 
                     </button>
 
 
                 </div>
+
 
 
             </div>
@@ -124,8 +158,8 @@ Ventas
 
     </div>
 
-</div>
 
+</div>
 
 
 
@@ -137,32 +171,50 @@ Ventas
 <div class="card shadow mb-4">
 
 
-<div class="card-header">
+<div class="card-header bg-dark text-white">
 
 🛒 Productos en venta
 
 </div>
 
 
+
 <div class="card-body">
 
 
-<table class="table table-striped">
+
+<table class="table table-striped table-hover align-middle text-center">
 
 
 <thead>
 
 <tr>
 
-<th>Producto</th>
-<th>Cantidad</th>
-<th>Precio</th>
-<th>Subtotal</th>
-<th>Acción</th>
+<th>
+Producto
+</th>
+
+<th>
+Cantidad
+</th>
+
+<th>
+Precio
+</th>
+
+<th>
+Subtotal
+</th>
+
+<th>
+Acción
+</th>
+
 
 </tr>
 
 </thead>
+
 
 
 <tbody>
@@ -171,36 +223,67 @@ Ventas
 {% for item in carrito %}
 
 
+
 <tr>
 
 
-<td>
+<td class="text-start">
+
 {{ item.producto }}
+
 </td>
 
 
+
 <td>
+
+<span class="badge bg-primary">
+
 {{ item.cantidad }}
+
+</span>
+
+
 </td>
 
-
-<td>
-$ {{ "{:,.0f}".format(item.precio) }}
-</td>
-
-
-<td>
-$ {{ "{:,.0f}".format(item.subtotal) }}
-</td>
 
 
 <td>
 
+$ {{ "{:,.0f}".format(item.precio).replace(",", ".") }}
 
-<a href="/ventas/carrito/eliminar/{{ item.id }}"
-class="btn btn-danger btn-sm">
+</td>
 
-🗑️
+
+
+
+<td>
+
+<strong>
+
+$ {{ "{:,.0f}".format(item.subtotal).replace(",", ".") }}
+
+</strong>
+
+
+</td>
+
+
+
+
+<td>
+
+
+<a href="{{ url_for('ventas.eliminar', id=item.id) }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('¿Eliminar producto del carrito?')">
+
+
+<i class="bi bi-trash"></i>
+
+
+Eliminar
+
 
 </a>
 
@@ -208,40 +291,75 @@ class="btn btn-danger btn-sm">
 </td>
 
 
+
 </tr>
+
 
 
 {% else %}
 
 
+
 <tr>
 
 <td colspan="5"
-class="text-center">
+class="text-center text-muted">
 
-Carrito vacío
+
+🛒 Carrito vacío
+
 
 </td>
 
+
 </tr>
+
 
 
 {% endfor %}
 
 
+
 </tbody>
+
 
 
 </table>
 
 
-</div>
+
+
+<hr>
+
+
+<div class="text-end">
+
+
+<h4>
+
+
+Total:
+
+<span class="text-success">
+
+
+$ {{ "{:,.0f}".format(carrito|sum(attribute='subtotal')).replace(",", ".") }}
+
+
+</span>
+
+
+</h4>
+
 
 </div>
 
 
 
+</div>
 
+
+</div>
 
 <!-- =========================
      CONFIRMAR VENTA
@@ -316,12 +434,46 @@ readonly>
 
 
 
+<div class="col-md-3">
+
+<label class="form-label">
+Forma de pago
+</label>
+
+<select 
+name="forma_pago"
+class="form-select"
+required>
+
+<option value="Efectivo">
+💵 Efectivo
+</option>
+
+<option value="Transferencia">
+🏦 Transferencia
+</option>
+
+<option value="Tarjeta">
+💳 Tarjeta
+</option>
+
+<option value="Débito">
+💳 Débito
+</option>
+
+</select>
+
+</div>
+
+
 <div class="col-md-3 d-flex align-items-end">
 
 
 <button class="btn btn-success w-100">
 
-✅ Confirmar venta
+<i class="bi bi-check-circle"></i>
+
+Confirmar venta
 
 </button>
 
@@ -460,7 +612,16 @@ class="btn btn-info btn-sm">
 
         Ver Boleta
 
-    </a>   
+    </a> 
+    
+    <a href="{{ url_for('ventas.pdf_boleta', id=venta.id) }}"
+        class="btn btn-secondary btn-sm">
+
+        <i class="bi bi-download"></i>
+
+        Descargar PDF
+
+        </a>
 
 </td>
 
@@ -501,17 +662,65 @@ No existen ventas registradas.
 
 {% endfor %}
 
-
 </tbody>
-
 
 </table>
 
+</div>
 
 </div>
 
+<script>
 
-</div>
+const lista = document.getElementById("listaProductos");
 
+const precio = document.getElementById("precio");
+
+const buscar = document.getElementById("buscarProducto");
+
+
+// cargar precio automático
+
+lista.addEventListener("change", function(){
+
+    let producto = lista.options[lista.selectedIndex];
+
+    precio.value = producto.dataset.precio;
+
+});
+
+
+
+// buscar productos
+
+buscar.addEventListener("keyup", function(){
+
+    let texto = buscar.value.toLowerCase();
+
+
+    for(let opcion of lista.options){
+
+
+        let nombre = opcion.dataset.nombre;
+
+
+        if(nombre.includes(texto)){
+
+            opcion.style.display="block";
+
+        }else{
+
+            opcion.style.display="none";
+
+        }
+
+
+    }
+
+
+});
+
+
+</script>
 
 {% endblock %}

@@ -26,29 +26,15 @@ def listar_productos():
 
     cursor = conexion.cursor()
 
-
     cursor.execute("""
-        SELECT 
-            productos.*,
-            categorias.nombre AS categoria,
-            marcas.nombre AS marca
-
+        SELECT *
         FROM productos
-
-        LEFT JOIN categorias
-        ON productos.categoria_id = categorias.id
-
-        LEFT JOIN marcas
-        ON productos.marca_id = marcas.id
-
-        ORDER BY productos.id DESC
+        ORDER BY id DESC
     """)
-
 
     productos = cursor.fetchall()
 
     conexion.close()
-
 
     return productos
 

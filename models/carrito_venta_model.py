@@ -25,25 +25,29 @@ def listar_carrito(usuario):
 
     cursor.execute("""
         SELECT
-            carrito_ventas.id,
-            carrito_ventas.producto_id,
-            carrito_ventas.cantidad,
-            carrito_ventas.precio,
-            carrito_ventas.subtotal,
-            carrito_ventas.usuario,
 
-            productos.nombre AS nombre_producto,
-            productos.imagen AS imagen_producto
+            carrito_ventas.id,
+
+            carrito_ventas.producto_id,
+
+            productos.nombre AS producto,
+
+            carrito_ventas.cantidad,
+
+            carrito_ventas.precio,
+
+            carrito_ventas.subtotal
+
 
         FROM carrito_ventas
 
+
         INNER JOIN productos
 
-        ON carrito_ventas.producto_id = productos.id
+        ON productos.id = carrito_ventas.producto_id
+
 
         WHERE carrito_ventas.usuario = ?
-
-        ORDER BY carrito_ventas.id DESC
 
     """,
     (usuario,))

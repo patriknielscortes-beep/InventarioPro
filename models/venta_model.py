@@ -303,20 +303,16 @@ def obtener_venta(id):
 
     cursor = conexion.cursor()
 
-
     cursor.execute("""
-        SELECT *
+        SELECT
+            *
         FROM ventas
         WHERE id = ?
-
     """,
     (id,))
 
-
     venta = cursor.fetchone()
 
-
     conexion.close()
-
 
     return venta

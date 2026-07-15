@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Boleta {{ venta.folio }}
+</title>
+
+
+<style>
+
+body{
+
+    font-family: Arial, sans-serif;
+    font-size:12px;
+
+}
+
+
+.boleta{
+
+    width:300px;
+    margin:auto;
+
+}
+
+
+.centro{
+
+    text-align:center;
+
+}
+
+
+.logo{
+
+    width:100px;
+}
+
+
+.empresa{
+
+    font-size:16px;
+    font-weight:bold;
+
+}
+
+
+.linea{
+
+    border-top:1px dashed #000;
+    margin:10px 0;
+
+}
+
+
+.producto{
+
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:5px;
+
+}
+
+
+.total{
+
+    font-size:18px;
+    font-weight:bold;
+    text-align:right;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="boleta">
+
+
+<div class="centro">
+
+
+<img 
+src="static/img/logo.png"
+class="logo">
+
+
+<div class="empresa">
+
+{{ empresa.nombre }}
+
+</div>
+
+
+RUT:
+{{ empresa.rut }}
+
+<br>
+
+
+{{ empresa.giro }}
+
+<br>
+
+
+{{ empresa.direccion }}
+
+<br>
+
+
+{{ empresa.comuna }}
+
+
+
+</div>
+
+
+<div class="linea"></div>
+
+
+
+<div class="centro">
+
+<b>
+
+BOLETA ELECTRÓNICA
+
+</b>
+
+<br>
+
+Nº {{ venta.folio }}
+
+</div>
+
+
+
+<div class="linea"></div>
+
+
+
+Fecha:
+
+{{ venta.fecha }}
+
+
+<br>
+
+
+Cliente:
+
+{{ venta.cliente }}
+
+
+<br>
+
+
+Vendedor:
+
+{{ venta.usuario }}
+
+
+<br>
+
+
+Estado:
+
+{{ venta.estado }}
+
+
+
+<div class="linea"></div>
+
+
+
+
+{% for item in detalle %}
+
+
+<div class="producto">
+
+
+<span>
+
+{{ item.nombre }}
+
+<br>
+
+{{ item.cantidad }} x
+
+${{ "{:,.0f}".format(item.precio).replace(",", ".") }}
+
+
+</span>
+
+
+<span>
+
+${{ "{:,.0f}".format(item.subtotal).replace(",", ".") }}
+
+</span>
+
+
+</div>
+
+
+{% endfor %}
+
+
+
+
+<div class="linea"></div>
+
+
+
+<p>
+
+Neto:
+
+${{ "{:,.0f}".format(venta.neto).replace(",", ".") }}
+
+</p>
+
+
+<p>
+
+IVA 19%:
+
+${{ "{:,.0f}".format(venta.iva).replace(",", ".") }}
+
+</p>
+
+
+
+<div class="total">
+
+TOTAL:
+
+${{ "{:,.0f}".format(venta.total).replace(",", ".") }}
+
+</div>
+
+
+
+<div class="linea"></div>
+
+
+
+<div class="centro">
+
+
+Forma pago:
+
+<br>
+
+
+{{ venta.forma_pago }}
+
+
+<br><br>
+
+
+Gracias por su compra
+
+
+</div>
+
+
+
+</div>
+
+
+</body>
+
+</html>

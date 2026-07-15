@@ -3,9 +3,11 @@ body{
 }
 
 .logo{
-    font-size:70px;
-    color:#0d6efd;
+    width:150px;
+    height:150px;
+    object-fit:contain;
 }
+
 
 .card{
     border-radius:20px;
@@ -59,3 +61,67 @@ body{
 .table-nowrap th{
     white-space: nowrap;
 }
+
+.nombre-empresa{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.numero-boleta{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.linea-producto{
+    border-bottom:1px dotted #999;
+    padding-bottom:5px;
+    margin-bottom:8px;
+}
+
+.no-pdf{
+    display:block;
+}
+
+@media print{
+    .no-pdf{
+        display:none;
+    }
+}
+
+@media print{
+
+body{
+    background:white;
+}
+
+
+.boleta{
+
+    margin:0;
+
+    width:80mm;
+
+}
+
+
+.botones{
+
+    display:none;
+
+}
+
+}
+
+.timbre{
+
+    text-align:center;
+
+    font-size:10px;
+
+    margin-top:10px;
+
+    line-height:14px;
+
+}
+

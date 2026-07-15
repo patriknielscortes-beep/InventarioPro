@@ -1,12 +1,24 @@
 .producto{
 
-    display:flex;
+    display:table;
 
-    justify-content:space-between;
+    width:100%;
 
-    align-items:flex-start;
+    margin-bottom:6px;
 
-    margin-bottom:8px;
+}
+
+
+.producto span{
+
+    display:table-cell;
+
+}
+
+
+.producto span:last-child{
+
+    text-align:right;
 
 }
 
@@ -81,15 +93,54 @@
 
 
 .total{
-
-    font-size:28px;
-
+    font-size:24px;
     font-weight:bold;
-
+    text-align:right;
+    margin-top:10px;
 }
 
 .nombre{
 
     width:200px;
+
+}
+
+.no-pdf{
+    display:none;
+}
+
+@media print{
+
+body{
+    background:white;
+}
+
+
+.boleta{
+
+    margin:0;
+
+    width:80mm;
+
+}
+
+
+.botones{
+
+    display:none;
+
+}
+
+}
+
+.timbre{
+
+    text-align:center;
+
+    font-size:10px;
+
+    margin-top:10px;
+
+    line-height:14px;
 
 }

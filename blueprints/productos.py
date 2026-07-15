@@ -106,11 +106,9 @@ def nuevo():
 
 @productos.route("/productos/barcode/<int:id>")
 @login_required
-@role_required("Administrador")
 def barcode_producto(id):
 
     producto = obtener_producto(id)
-
 
     return render_template(
         "barcode.html",
