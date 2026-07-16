@@ -83,6 +83,34 @@ def crear_cliente(nombre, rut, telefono, email, direccion):
 
 
 # ==========================================
+# BUSCAR CLIENTE POR NOMBRE
+# ==========================================
+
+def buscar_cliente_nombre(nombre):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT *
+        FROM clientes
+        WHERE nombre = ?
+        LIMIT 1
+    """,
+    (nombre,))
+
+
+    cliente = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return cliente
+
+# ==========================================
 # ELIMINAR CLIENTE
 # ==========================================
 

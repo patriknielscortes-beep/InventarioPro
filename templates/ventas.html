@@ -529,7 +529,7 @@ Confirmar venta
 <th>Estado</th>
 <th>Usuario</th>
 <th>Detalle</th>
-<th>Ver Boleta</th>
+<th >Acciones</th>
 <th>Anular</th>
 
 </tr>
@@ -604,24 +604,40 @@ class="btn btn-info btn-sm">
 
 <td>
 
+<div class="d-flex flex-column gap-2">
+
+
     <a 
     href="{{ url_for('ventas.comprobante', id=venta.id) }}"
     class="btn btn-primary btn-sm">
 
         <i class="bi bi-receipt"></i>
-
         Ver Boleta
 
-    </a> 
-    
-    <a href="{{ url_for('ventas.pdf_boleta', id=venta.id) }}"
-        class="btn btn-secondary btn-sm">
+    </a>
+
+
+    <a 
+    href="{{ url_for('ventas.pdf_boleta', id=venta.id) }}"
+    class="btn btn-secondary btn-sm">
 
         <i class="bi bi-download"></i>
-
         Descargar PDF
 
-        </a>
+    </a>
+
+
+    <a 
+    href="{{ url_for('ventas.enviar_correo', id=venta.id) }}"
+    class="btn btn-success btn-sm">
+
+        <i class="bi bi-envelope"></i>
+        Enviar correo
+
+    </a>
+
+
+</div>
 
 </td>
 

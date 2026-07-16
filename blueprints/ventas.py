@@ -27,11 +27,16 @@ import os
 
 from utils.helpers import login_required, role_required
 
-from models.cliente_model import listar_clientes
+from models.cliente_model import (
+    listar_clientes,
+    buscar_cliente_nombre
+)
 
 from flask import request
 
 from models.empresa_model import obtener_empresa
+
+from email_service import enviar_boleta
 
 from flask import make_response
 
@@ -42,7 +47,6 @@ from models.producto_model import (
     listar_productos,
     actualizar_stock_venta
 )
-
 import qrcode
 import os
 from flask import send_file
@@ -184,13 +188,37 @@ def confirmar():
     vaciar_carrito(usuario)
 
 
+        # Crear copia PDF automática
+
+    try:
+
+        ruta_pdf = generar_pdf_venta(venta_id)
+
+
+        cliente_datos = buscar_cliente_nombre(cliente)
+
+
+        if cliente_datos and cliente_datos["email"]:
+
+            enviar_boleta(
+                cliente_datos["email"],
+                cliente_datos["nombre"],
+                venta_id,
+                ruta_pdf
+            )
+
+
+    except Exception as e:
+
+        print("Error enviando boleta:", e)
+
+
 
     return redirect(
-    url_for(
-        "ventas.pdf_boleta",
-        id=venta_id
-    )
-
+        url_for(
+            "ventas.comprobante",
+            id=venta_id
+        )
     )
 
 
@@ -421,6 +449,127 @@ def pdf_boleta(id):
         mimetype="application/pdf"
     )
 
+
+# ==========================================
+# ENVIAR BOLETA POR CORREO
+# ==========================================
+
+@ventas.route("/ventas/enviar_correo/<int:id>")
+@login_required
+def enviar_correo(id):
+
+    venta = obtener_venta(id)
+
+
+    cliente = buscar_cliente_nombre(
+        venta["cliente"]
+    )
+
+
+    if not cliente:
+
+        return "Cliente no encontrado"
+
+
+
+    if not cliente["email"]:
+
+        return "El cliente no tiene correo registrado"
+
+
+
+    ruta_pdf = os.path.abspath(
+        f"static/boletas/boleta_{venta['folio']}.pdf"
+    )
+
+
+    if not os.path.exists(ruta_pdf):
+
+        return "Primero debe generar el PDF"
+
+
+
+    resultado = enviar_boleta(
+        cliente["email"],
+        cliente["nombre"],
+        venta["folio"],
+        ruta_pdf
+    )
+
+
+    if resultado:
+
+        return "Correo enviado correctamente"
+
+
+    else:
+
+        return "Error enviando correo"
+    
+
+# ==========================================
+# GENERAR PDF AUTOMÁTICO
+# ==========================================
+
+def generar_pdf_venta(id):
+
+    venta = obtener_venta(id)
+
+    detalle = detalle_venta(id)
+
+    empresa = obtener_empresa()
+
+
+    carpeta = os.path.join(
+        "static",
+        "boletas"
+    )
+
+
+    if not os.path.exists(carpeta):
+        os.makedirs(carpeta)
+
+
+
+    ruta_pdf = os.path.join(
+        carpeta,
+        f"boleta_{venta['folio']}.pdf"
+    )
+
+
+
+    url = request.host_url + f"ventas/comprobante/{id}"
+
+
+
+    with sync_playwright() as p:
+
+        navegador = p.chromium.launch(
+            headless=True
+        )
+
+
+        pagina = navegador.new_page()
+
+
+        pagina.goto(
+            url,
+            wait_until="networkidle"
+        )
+
+
+        pagina.pdf(
+            path=ruta_pdf,
+            width="80mm",
+            print_background=True
+        )
+
+
+        navegador.close()
+
+
+
+    return ruta_pdf
 
 # ============================
 # CREAR CODIGO DE BARRAS
