@@ -1,4 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for
+from flask import Blueprint, render_template, request, redirect, session, url_for, send_file
+import os
+
+from playwright.sync_api import sync_playwright
+import qrcode
+
+from utils.helpers import login_required, role_required
 
 from models.venta_model import (
     listar_ventas,
@@ -13,48 +19,27 @@ from models.carrito_venta_model import (
     listar_carrito,
     agregar_carrito,
     eliminar_carrito,
-    vaciar_carrito,
-    obtener_total_carrito
+    vaciar_carrito
 )
 
 from models.producto_model import (
+    listar_productos,
     actualizar_stock_venta
 )
 
 from models.movimiento_model import registrar_movimiento
-
-import os
-
-from utils.helpers import login_required, role_required
 
 from models.cliente_model import (
     listar_clientes,
     buscar_cliente_nombre
 )
 
-from flask import request
-
 from models.empresa_model import obtener_empresa
-
-from flask import make_response
 
 from models.envio_correo_model import registrar_envio
 
-from playwright.sync_api import sync_playwright
-import tempfile
-
-from models.producto_model import (
-    listar_productos,
-    actualizar_stock_venta
-)
-import qrcode
-import os
-from flask import send_file
-from playwright.sync_api import sync_playwright
-from flask import send_file
-import tempfile
-from models.cliente_model import buscar_cliente_nombre
 from email_service import enviar_boleta
+
 
 ventas = Blueprint("ventas", __name__)
 
@@ -72,7 +57,9 @@ def lista():
 
     productos = listar_productos()
 
-    carrito = listar_carrito(session["usuario"])
+    carrito = listar_carrito(
+        session["usuario"]
+    )
 
 
     return render_template(
@@ -80,8 +67,9 @@ def lista():
         ventas=datos,
         productos=productos,
         carrito=carrito,
-        clientes = listar_clientes()
+        clientes=listar_clientes()
     )
+
 
 
 # ==========================================
@@ -90,7 +78,7 @@ def lista():
 
 @ventas.route("/ventas/carrito/agregar", methods=["POST"])
 @login_required
-@role_required("Administrador","Vendedor")
+@role_required("Administrador", "Vendedor")
 def agregar():
 
     producto_id = request.form["producto_id"]
@@ -111,6 +99,7 @@ def agregar():
 
 
     return redirect("/ventas")
+
 
 
 # ==========================================
@@ -137,13 +126,13 @@ def confirmar():
         return redirect("/ventas")
 
 
+
     total = sum(
         item["subtotal"]
         for item in carrito
     )
 
 
-    # Crear venta
 
     venta_id = crear_venta(
         cliente,
@@ -153,9 +142,9 @@ def confirmar():
     )
 
 
-    # Guardar detalle y descontar stock
 
     for item in carrito:
+
 
         agregar_detalle_venta(
             venta_id,
@@ -164,10 +153,12 @@ def confirmar():
             item["precio"]
         )
 
+
         actualizar_stock_venta(
             item["producto_id"],
             item["cantidad"]
         )
+
 
         registrar_movimiento(
             item["producto_id"],
@@ -177,26 +168,27 @@ def confirmar():
         )
 
 
-        # Limpiar carrito
 
     vaciar_carrito(usuario)
 
 
-    # ==========================================
-    # CREAR COPIA PDF Y ENVIAR BOLETA
-    # ==========================================
+
+    # ======================================
+    # PDF + CORREO AUTOMÁTICO
+    # ======================================
 
     cliente_datos = None
 
+
     try:
 
-        # Generar PDF automáticamente
         ruta_pdf = generar_pdf_venta(venta_id)
 
-        # Buscar cliente
+
         cliente_datos = buscar_cliente_nombre(cliente)
 
-        # Enviar correo si tiene email
+
+
         if cliente_datos and cliente_datos["email"]:
 
 
@@ -208,60 +200,6 @@ def confirmar():
             )
 
 
-        registrar_envio(
-            venta_id,
-            cliente_datos["email"],
-            "Enviado",
-            "Boleta enviada correctamente"
-        )
-
-
-    except Exception as e:
-
-        print("Error enviando boleta:", e)
-
-        registrar_envio(
-            venta_id,
-            cliente_datos["email"] if cliente_datos else "",
-            "Error",
-            str(e)
-        )
-
-
-    return redirect(
-        url_for(
-            "ventas.comprobante",
-            id=venta_id
-        )
-    )
-
-
-    # ==========================================
-    # GENERAR PDF Y ENVIAR BOLETA
-    # ==========================================
-
-    cliente_datos = None
-
-    try:
-
-        # Generar PDF automáticamente
-        ruta_pdf = generar_pdf_venta(venta_id)
-
-        # Buscar datos del cliente
-        cliente_datos = buscar_cliente_nombre(cliente)
-
-        # Enviar correo si tiene email
-        if cliente_datos and cliente_datos["email"]:
-
-            resultado = enviar_boleta(
-            cliente_datos["email"],
-            cliente_datos["nombre"],
-            venta_id,
-            ruta_pdf
-        )
-
-        if resultado:
-
             registrar_envio(
                 venta_id,
                 cliente_datos["email"],
@@ -269,18 +207,15 @@ def confirmar():
                 "Boleta enviada correctamente"
             )
 
-        else:
-
-            registrar_envio(
-                venta_id,
-                cliente_datos["email"],
-                "Error",
-                "No fue posible enviar el correo."
-            )
 
     except Exception as e:
 
-        print("Error enviando boleta:", e)
+
+        print(
+            "Error enviando boleta:",
+            e
+        )
+
 
         registrar_envio(
             venta_id,
@@ -288,6 +223,7 @@ def confirmar():
             "Error",
             str(e)
         )
+
 
 
     return redirect(
@@ -326,8 +262,9 @@ def anular(id):
     return redirect("/ventas")
 
 
+
 # ==========================================
-# ELIMINAR PRODUCTO CARRITO
+# ELIMINAR PRODUCTO DEL CARRITO
 # ==========================================
 
 @ventas.route("/ventas/carrito/eliminar/<int:id>")
@@ -336,7 +273,9 @@ def eliminar(id):
 
     eliminar_carrito(id)
 
+
     return redirect("/ventas")
+
 
 
 # ==========================================
@@ -356,6 +295,8 @@ def detalle(id):
         venta_id=id
     )
 
+
+
 # ==========================================
 # COMPROBANTE
 # ==========================================
@@ -371,29 +312,40 @@ def comprobante(id):
     empresa = obtener_empresa()
 
 
+
     carpeta_qr = os.path.join(
         "static",
         "qr"
     )
 
 
+
     if not os.path.exists(carpeta_qr):
+
         os.makedirs(carpeta_qr)
 
 
 
-    datos = f"""
-    InventarioPro
+    datos_qr = f"""
+InventarioPro
 
-    Venta: {venta['folio']}
-    Cliente: {venta['cliente']}
-    Total: {venta['total']}
-    Fecha: {venta['fecha']}
-    """
+Venta:
+{venta['folio']}
+
+Cliente:
+{venta['cliente']}
+
+Total:
+{venta['total']}
+
+Fecha:
+{venta['fecha']}
+"""
 
 
 
     nombre_qr = f"venta_{venta['id']}.png"
+
 
 
     ruta_qr = os.path.join(
@@ -402,25 +354,29 @@ def comprobante(id):
     )
 
 
-    qr = qrcode.make(datos)
+
+    qr = qrcode.make(datos_qr)
 
     qr.save(ruta_qr)
 
 
 
     return render_template(
-    "comprobante.html",
-    venta=venta,
-    detalle=detalle,
-    empresa=empresa,
-    qr=f"qr/{nombre_qr}"
+        "comprobante.html",
+        venta=venta,
+        detalle=detalle,
+        empresa=empresa,
+        qr=f"qr/{nombre_qr}"
     )
 
+
+
 # ==========================================
-# COMPROBANTE INTERNO PARA PDF
+# COMPROBANTE PARA PDF
 # ==========================================
 
 @ventas.route("/ventas/comprobante_pdf/<int:id>")
+@login_required
 def comprobante_pdf(id):
 
     venta = obtener_venta(id)
@@ -428,6 +384,7 @@ def comprobante_pdf(id):
     detalle = detalle_venta(id)
 
     empresa = obtener_empresa()
+
 
 
     return render_template(
@@ -442,7 +399,7 @@ def comprobante_pdf(id):
 
 
 # ==========================================
-# PDF PROFESIONAL BOLETA
+# DESCARGAR PDF BOLETA
 # ==========================================
 
 @ventas.route("/ventas/pdf/<int:id>")
@@ -452,13 +409,16 @@ def pdf_boleta(id):
     venta = obtener_venta(id)
 
 
+
     carpeta_boletas = os.path.join(
         "static",
         "boletas"
     )
 
 
+
     if not os.path.exists(carpeta_boletas):
+
         os.makedirs(carpeta_boletas)
 
 
@@ -471,15 +431,18 @@ def pdf_boleta(id):
     )
 
 
+
     url = request.host_url + f"ventas/comprobante_pdf/{id}"
 
 
 
     with sync_playwright() as p:
 
+
         navegador = p.chromium.launch(
             headless=True
         )
+
 
 
         pagina = navegador.new_page(
@@ -490,13 +453,11 @@ def pdf_boleta(id):
         )
 
 
+
         pagina.goto(
             url,
             wait_until="networkidle"
         )
-
-
-        pagina.wait_for_timeout(3000)
 
 
 
@@ -507,13 +468,8 @@ def pdf_boleta(id):
         )
 
 
+
         navegador.close()
-
-
-
-    if not os.path.exists(ruta_pdf):
-
-        return "Error: No se pudo generar el PDF"
 
 
 
@@ -524,13 +480,13 @@ def pdf_boleta(id):
         mimetype="application/pdf"
     )
 
-
 # ==========================================
 # ENVIAR BOLETA POR CORREO
 # ==========================================
 
 @ventas.route("/ventas/enviar_correo/<int:id>")
 @login_required
+@role_required("Administrador", "Vendedor")
 def enviar_correo(id):
 
     venta = obtener_venta(id)
@@ -558,29 +514,130 @@ def enviar_correo(id):
     )
 
 
+
     if not os.path.exists(ruta_pdf):
 
-        return "Primero debe generar el PDF"
+        ruta_pdf = generar_pdf_venta(id)
 
 
 
-    resultado = enviar_boleta(
-        cliente["email"],
-        cliente["nombre"],
-        venta["folio"],
-        ruta_pdf
+    try:
+
+        enviar_boleta(
+            cliente["email"],
+            cliente["nombre"],
+            venta["folio"],
+            ruta_pdf
+        )
+
+
+        registrar_envio(
+            id,
+            cliente["email"],
+            "Enviado",
+            "Correo enviado manualmente"
+        )
+
+
+        return redirect("/envios")
+
+
+
+    except Exception as e:
+
+
+        registrar_envio(
+            id,
+            cliente["email"],
+            "Error",
+            str(e)
+        )
+
+
+        return redirect("/envios")
+
+
+
+
+# ==========================================
+# REENVIAR BOLETA DESDE HISTORIAL
+# ==========================================
+
+@ventas.route("/ventas/reenviar_correo/<int:id>")
+@login_required
+@role_required("Administrador", "Vendedor")
+def reenviar_correo(id):
+
+
+    venta = obtener_venta(id)
+
+
+
+    if not venta:
+
+        return "Venta no encontrada"
+
+
+
+    cliente = buscar_cliente_nombre(
+        venta["cliente"]
     )
 
 
-    if resultado:
 
-        return "Correo enviado correctamente"
+    if not cliente:
+
+        return "Cliente no encontrado"
 
 
-    else:
 
-        return "Error enviando correo"
-    
+    if not cliente["email"]:
+
+        return "Cliente sin correo registrado"
+
+
+
+    try:
+
+
+        ruta_pdf = generar_pdf_venta(id)
+
+
+
+        enviar_boleta(
+            cliente["email"],
+            cliente["nombre"],
+            venta["folio"],
+            ruta_pdf
+        )
+
+
+
+        registrar_envio(
+            id,
+            cliente["email"],
+            "Enviado",
+            "Correo reenviado desde historial"
+        )
+
+
+
+    except Exception as e:
+
+
+        registrar_envio(
+            id,
+            cliente["email"],
+            "Error",
+            str(e)
+        )
+
+
+
+    return redirect("/envios")
+
+
+
 
 # ==========================================
 # GENERAR PDF AUTOMÁTICO
@@ -588,11 +645,8 @@ def enviar_correo(id):
 
 def generar_pdf_venta(id):
 
+
     venta = obtener_venta(id)
-
-    detalle = detalle_venta(id)
-
-    empresa = obtener_empresa()
 
 
     carpeta = os.path.join(
@@ -601,36 +655,44 @@ def generar_pdf_venta(id):
     )
 
 
+
     if not os.path.exists(carpeta):
+
         os.makedirs(carpeta)
 
 
 
-    ruta_pdf = os.path.join(
-        carpeta,
-        f"boleta_{venta['folio']}.pdf"
+    ruta_pdf = os.path.abspath(
+        os.path.join(
+            carpeta,
+            f"boleta_{venta['folio']}.pdf"
+        )
     )
 
 
 
-    url = request.host_url + f"ventas/comprobante/{id}"
+    url = request.host_url + f"ventas/comprobante_pdf/{id}"
 
 
 
     with sync_playwright() as p:
+
 
         navegador = p.chromium.launch(
             headless=True
         )
 
 
+
         pagina = navegador.new_page()
+
 
 
         pagina.goto(
             url,
             wait_until="networkidle"
         )
+
 
 
         pagina.pdf(
@@ -640,52 +702,9 @@ def generar_pdf_venta(id):
         )
 
 
+
         navegador.close()
 
 
 
     return ruta_pdf
-
-# ============================
-# CREAR CODIGO DE BARRAS
-# ============================
-
-    carpeta_barcode = os.path.join(
-        "static",
-        "barcodes"
-    )
-
-    if not os.path.exists(carpeta_barcode):
-        os.makedirs(carpeta_barcode)
-
-
-
-    nombre_barcode = f"venta_{venta['folio']}"
-
-
-    ruta_barcode = os.path.join(
-        carpeta_barcode,
-        nombre_barcode
-    )
-
-
-
-    codigo = barcode.get(
-        "code128",
-        venta["folio"],
-        writer=ImageWriter()
-    )
-
-
-    codigo.save(ruta_barcode)
-
-
-    return render_template(
-        "comprobante.html",
-        venta=venta,
-        detalle=detalle,
-        empresa=empresa,
-        qr=f"qr/{nombre_qr}",
-        barcode=f"barcodes/{nombre_barcode}.png"
-    )
-
