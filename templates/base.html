@@ -58,6 +58,34 @@
         <!-- CONTENIDO DE CADA PAGINA -->
 
         <main class="p-4">
+            
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+
+                {% if mensajes %}
+
+                    {% for categoria, mensaje in mensajes %}
+
+                        <div class="alert alert-{{ categoria }} alert-dismissible fade show"
+                            role="alert">
+
+                            {{ mensaje }}
+
+
+                            <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                            </button>
+
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
 
 
             {% block contenido %}
@@ -93,6 +121,13 @@
 
     {% endif %}
 {% endwith %}
+
+
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 

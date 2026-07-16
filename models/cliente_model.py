@@ -110,6 +110,71 @@ def buscar_cliente_nombre(nombre):
 
     return cliente
 
+
+# ==========================================
+# EDITAR CLIENTE
+# ==========================================
+
+def editar_cliente(id, nombre, rut, telefono, email, direccion):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        UPDATE clientes
+        SET
+            nombre = ?,
+            rut = ?,
+            telefono = ?,
+            email = ?,
+            direccion = ?
+
+        WHERE id = ?
+
+    """,
+    (
+        nombre,
+        rut,
+        telefono,
+        email,
+        direccion,
+        id
+    ))
+
+
+    conexion.commit()
+
+    conexion.close()
+
+# ==========================================
+# BUSCAR CLIENTE POR EMAIL
+# ==========================================
+
+def buscar_email(email):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT *
+        FROM clientes
+        WHERE email = ?
+    """,
+    (email,))
+
+
+    cliente = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return cliente
+
 # ==========================================
 # ELIMINAR CLIENTE
 # ==========================================

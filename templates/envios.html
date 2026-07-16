@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Historial de Correos
+{% endblock %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">
+        📧 Historial de Correos
+    </h2>
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            Historial de envíos
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover table-striped">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Venta</th>
+                        <th>Correo</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Detalle</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for envio in envios %}
+
+                <tr>
+
+                    <td>
+                        {{ envio["id"] }}
+                    </td>
+
+                    <td>
+                        {{ envio["venta_id"] }}
+                    </td>
+
+                    <td>
+                        {{ envio["correo"] }}
+                    </td>
+
+                    <td>
+                        {{ envio["fecha"] }}
+                    </td>
+
+                    <td>
+
+                        {% if envio["estado"] == "Enviado" %}
+
+                            <span class="badge bg-success">
+                                {{ envio["estado"] }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                                {{ envio["estado"] }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ envio["detalle"] }}
+                    </td>
+
+                </tr>
+
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="6" class="text-center">
+
+                        No existen envíos registrados.
+
+                    </td>
+
+                </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

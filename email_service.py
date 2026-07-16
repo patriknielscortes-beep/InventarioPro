@@ -57,6 +57,6 @@ Equipo PARTRICK.
 
     except Exception as e:
 
-        print(e)
+        print("ERROR SMTP:", e)
 
-        return False
+    raise

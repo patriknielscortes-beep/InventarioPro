@@ -14,6 +14,7 @@ from blueprints.clientes import clientes
 from blueprints.pos import pos
 from blueprints.auditoria import auditoria
 from blueprints.reportes import reportes
+from blueprints.envios import envios
 
 
 
@@ -37,6 +38,9 @@ app.register_blueprint(clientes)
 app.register_blueprint(pos)
 app.register_blueprint(auditoria)
 app.register_blueprint(reportes)
+app.register_blueprint(envios)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -36,9 +36,9 @@ from flask import request
 
 from models.empresa_model import obtener_empresa
 
-from email_service import enviar_boleta
-
 from flask import make_response
+
+from models.envio_correo_model import registrar_envio
 
 from playwright.sync_api import sync_playwright
 import tempfile
@@ -53,7 +53,8 @@ from flask import send_file
 from playwright.sync_api import sync_playwright
 from flask import send_file
 import tempfile
-
+from models.cliente_model import buscar_cliente_nombre
+from email_service import enviar_boleta
 
 ventas = Blueprint("ventas", __name__)
 
@@ -136,12 +137,10 @@ def confirmar():
         return redirect("/ventas")
 
 
-
     total = sum(
         item["subtotal"]
         for item in carrito
     )
-
 
 
     # Crear venta
@@ -154,11 +153,9 @@ def confirmar():
     )
 
 
-
     # Guardar detalle y descontar stock
 
     for item in carrito:
-
 
         agregar_detalle_venta(
             venta_id,
@@ -167,12 +164,10 @@ def confirmar():
             item["precio"]
         )
 
-
         actualizar_stock_venta(
             item["producto_id"],
             item["cantidad"]
         )
-
 
         registrar_movimiento(
             item["producto_id"],
@@ -182,23 +177,28 @@ def confirmar():
         )
 
 
-
-    # Limpiar carrito
+        # Limpiar carrito
 
     vaciar_carrito(usuario)
 
 
-        # Crear copia PDF automática
+    # ==========================================
+    # CREAR COPIA PDF Y ENVIAR BOLETA
+    # ==========================================
+
+    cliente_datos = None
 
     try:
 
+        # Generar PDF automáticamente
         ruta_pdf = generar_pdf_venta(venta_id)
 
-
+        # Buscar cliente
         cliente_datos = buscar_cliente_nombre(cliente)
 
-
+        # Enviar correo si tiene email
         if cliente_datos and cliente_datos["email"]:
+
 
             enviar_boleta(
                 cliente_datos["email"],
@@ -208,10 +208,24 @@ def confirmar():
             )
 
 
+        registrar_envio(
+            venta_id,
+            cliente_datos["email"],
+            "Enviado",
+            "Boleta enviada correctamente"
+        )
+
+
     except Exception as e:
 
         print("Error enviando boleta:", e)
 
+        registrar_envio(
+            venta_id,
+            cliente_datos["email"] if cliente_datos else "",
+            "Error",
+            str(e)
+        )
 
 
     return redirect(
@@ -221,6 +235,67 @@ def confirmar():
         )
     )
 
+
+    # ==========================================
+    # GENERAR PDF Y ENVIAR BOLETA
+    # ==========================================
+
+    cliente_datos = None
+
+    try:
+
+        # Generar PDF automáticamente
+        ruta_pdf = generar_pdf_venta(venta_id)
+
+        # Buscar datos del cliente
+        cliente_datos = buscar_cliente_nombre(cliente)
+
+        # Enviar correo si tiene email
+        if cliente_datos and cliente_datos["email"]:
+
+            resultado = enviar_boleta(
+            cliente_datos["email"],
+            cliente_datos["nombre"],
+            venta_id,
+            ruta_pdf
+        )
+
+        if resultado:
+
+            registrar_envio(
+                venta_id,
+                cliente_datos["email"],
+                "Enviado",
+                "Boleta enviada correctamente"
+            )
+
+        else:
+
+            registrar_envio(
+                venta_id,
+                cliente_datos["email"],
+                "Error",
+                "No fue posible enviar el correo."
+            )
+
+    except Exception as e:
+
+        print("Error enviando boleta:", e)
+
+        registrar_envio(
+            venta_id,
+            cliente_datos["email"] if cliente_datos else "",
+            "Error",
+            str(e)
+        )
+
+
+    return redirect(
+        url_for(
+            "ventas.comprobante",
+            id=venta_id
+        )
+    )
 
 # ==========================================
 # ANULAR VENTA
