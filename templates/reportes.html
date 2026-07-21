@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Centro de Reportes
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+
+
+    <div class="card shadow mb-4">
+
+
+        <div class="card-header bg-dark text-white">
+
+            <h4 class="mb-0">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Centro de Reportes
+
+            </h4>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+            <div class="row g-4">
+
+
+
+                <!-- INVENTARIO -->
+
+                <div class="col-md-4">
+
+
+                    <div class="card shadow h-100 border-primary">
+
+
+                        <div class="card-body text-center">
+
+
+                            <i class="bi bi-box-seam display-4 text-primary"></i>
+
+
+                            <h5 class="mt-3">
+
+                                Reporte Inventario
+
+                            </h5>
+
+
+                            <p class="text-muted">
+
+                                Consulta productos,
+                                stock, marcas y precios.
+
+                            </p>
+
+
+                            <a href="/reportes/inventario"
+
+                               class="btn btn-primary">
+
+                                <i class="bi bi-file-earmark-pdf"></i>
+
+                                Descargar PDF
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <!-- VENTAS -->
+
+                <div class="col-md-4">
+
+
+                    <div class="card shadow h-100 border-success">
+
+
+                        <div class="card-body text-center">
+
+
+                            <i class="bi bi-cart-check display-4 text-success"></i>
+
+
+                            <h5 class="mt-3">
+
+                                Reporte Ventas
+
+                            </h5>
+
+
+                            <p class="text-muted">
+
+                                Historial de ventas,
+                                clientes y pagos.
+
+                            </p>
+
+
+                            <a href="/reportes/ventas"
+
+                               class="btn btn-success">
+
+
+                                <i class="bi bi-file-earmark-pdf"></i>
+
+                                Descargar PDF
+
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+                <!-- COMPRAS -->
+
+                <div class="col-md-4">
+
+
+                    <div class="card shadow h-100 border-warning">
+
+
+                        <div class="card-body text-center">
+
+
+                            <i class="bi bi-bag-plus display-4 text-warning"></i>
+
+
+                            <h5 class="mt-3">
+
+                                Reporte Compras
+
+                            </h5>
+
+
+                            <p class="text-muted">
+
+                                Proveedores,
+                                compras realizadas y montos.
+
+                            </p>
+
+
+
+                            <a href="/reportes/compras"
+
+                               class="btn btn-warning">
+
+
+                                <i class="bi bi-file-earmark-pdf"></i>
+
+                                Descargar PDF
+
+
+                            </a>
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

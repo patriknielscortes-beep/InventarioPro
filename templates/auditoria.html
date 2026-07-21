@@ -67,7 +67,40 @@ Auditoría
 
                         </td>
 
-                        <td>{{ registro.accion }}</td>
+                        <td>
+                            {% if "Inicio" in registro.accion %}
+
+                            <span class="badge bg-success">
+                                {{ registro.accion }}
+                            </span>
+
+                            {% elif "Cierre" in registro.accion %}
+
+                            <span class="badge bg-dark">
+                                {{ registro.accion }}
+                            </span>
+
+                            {% elif "Eliminar" in registro.accion %}
+
+                            <span class="badge bg-danger">
+                                {{ registro.accion }}
+                            </span>
+
+                            {% elif "Editar" in registro.accion %}
+
+                            <span class="badge bg-warning text-dark">
+                                {{ registro.accion }}
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-info">
+                                {{ registro.accion }}
+                            </span>
+
+                            {% endif %}
+
+                            </td>
 
                     </tr>
 

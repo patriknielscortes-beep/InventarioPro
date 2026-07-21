@@ -1,0 +1,632 @@
+/* ==========================================
+   DASHBOARD GENERAL
+========================================== */
+
+
+.dashboard-header{
+
+    background:white;
+    border-radius:24px;
+    padding:30px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+}
+
+
+.header-content{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+
+}
+
+
+.header-title h2{
+
+    color:#0d6efd;
+    font-weight:800;
+    margin-bottom:10px;
+
+}
+
+
+.header-title p{
+
+    margin:0;
+    color:#64748b;
+
+}
+
+
+.header-info{
+
+    text-align:right;
+
+}
+
+
+.status-online{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    background:#dcfce7;
+    color:#166534;
+
+    padding:10px 18px;
+
+    border-radius:30px;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
+}
+
+
+.header-item{
+
+    margin-top:8px;
+    color:#475569;
+
+}
+
+
+.header-item strong{
+
+    color:#111827;
+
+}
+
+
+
+/* ==========================================
+   KPI CARDS ERP
+========================================== */
+
+
+.kpi-card{
+
+    position:relative;
+
+    border:0;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    transition:.35s;
+
+    cursor:pointer;
+
+}
+
+
+.kpi-card:hover{
+
+    transform:translateY(-10px) scale(1.02);
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,.18);
+
+}
+
+
+.kpi-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:100px;
+
+    height:100px;
+
+    right:-30px;
+
+    top:-30px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.15);
+
+}
+
+
+
+.kpi-card .card-body{
+
+    padding:30px;
+
+}
+
+
+
+.kpi-icon{
+
+    font-size:48px;
+
+    margin-bottom:15px;
+
+    opacity:.9;
+
+}
+
+
+
+.kpi-card h2{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+
+}
+
+
+
+.kpi-card p{
+
+    margin:0;
+
+    font-size:16px;
+
+    opacity:.9;
+
+}
+
+
+
+/* COLORES KPI */
+
+
+.kpi-blue{
+
+    background:#2563eb;
+    color:white;
+
+}
+
+
+.kpi-cyan{
+
+    background:#0891b2;
+    color:white;
+
+}
+
+
+.kpi-green{
+
+    background:#16a34a;
+    color:white;
+
+}
+
+
+.kpi-orange{
+
+    background:#ea580c;
+    color:white;
+
+}
+
+
+.kpi-purple{
+
+    background:#7c3aed;
+    color:white;
+
+}
+
+
+.kpi-red{
+
+    background:#dc2626;
+    color:white;
+
+}
+
+
+.kpi-dark{
+
+    background:#111827;
+    color:white;
+
+}
+
+
+.kpi-light{
+
+    background:#f8fafc;
+    color:#111827;
+
+}
+
+
+
+/* ==========================================
+   PANELES
+========================================== */
+
+
+.dashboard-panel{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+    animation:aparecer .5s ease;
+
+}
+
+
+
+.panel-header{
+
+    margin-bottom:20px;
+
+}
+
+
+
+.panel-header h5{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+
+
+.chart-container{
+
+    height:350px;
+
+}
+
+
+.chart-container canvas{
+
+    max-height:350px;
+
+}
+
+
+
+/* ==========================================
+   USUARIO
+========================================== */
+
+
+.user-panel{
+
+    text-align:center;
+
+}
+
+
+.user-profile{
+
+    padding:20px 0;
+
+}
+
+
+.user-avatar{
+
+    width:90px;
+
+    height:90px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:45px;
+
+    background:#e2e8f0;
+
+}
+
+
+
+.user-profile h4{
+
+    font-weight:800;
+
+}
+
+
+.user-role{
+
+    display:inline-block;
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+    padding:6px 18px;
+
+    border-radius:20px;
+
+}
+
+
+.user-status{
+
+    margin-top:20px;
+
+    color:#166534;
+
+    font-weight:600;
+
+}
+
+
+
+/* ==========================================
+   ACTIVIDAD
+========================================== */
+
+
+.activity-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+
+.activity-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:#f8fafc;
+
+}
+
+
+.activity-icon{
+
+    font-size:28px;
+
+}
+
+
+.activity-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+.activity-content small{
+
+    color:#64748b;
+
+}
+
+
+
+/* ==========================================
+   TABLAS
+========================================== */
+
+
+.dashboard-panel .table{
+
+    margin-bottom:0;
+
+}
+
+
+.dashboard-panel th{
+
+    color:#64748b;
+
+    font-size:13px;
+
+    text-transform:uppercase;
+
+}
+
+
+.dashboard-panel td{
+
+    font-size:14px;
+
+}
+
+
+.dashboard-panel tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+
+/* ==========================================
+   ALERTAS
+========================================== */
+
+
+.alert{
+
+    border-radius:18px;
+
+    padding:20px;
+
+}
+
+
+.alert li{
+
+    margin-bottom:8px;
+
+}
+
+
+
+/* ==========================================
+   ONLINE PULSE
+========================================== */
+
+
+.pulse{
+
+    width:10px;
+
+    height:10px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+    display:inline-block;
+
+    animation:pulso 1.5s infinite;
+
+}
+
+
+
+@keyframes pulso{
+
+
+    0%{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+
+    50%{
+
+        transform:scale(1.5);
+
+        opacity:.5;
+
+    }
+
+
+    100%{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   ANIMACIÓN
+========================================== */
+
+
+@keyframes aparecer{
+
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(15px);
+
+    }
+
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+
+@media(max-width:768px){
+
+
+    .header-content{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+    .header-info{
+
+        text-align:left;
+
+    }
+
+
+    .kpi-card h2{
+
+        font-size:26px;
+
+    }
+
+
+    .dashboard-panel{
+
+        padding:18px;
+
+    }
+
+
+}

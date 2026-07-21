@@ -1,632 +1,76 @@
 {% extends "base.html" %}
 
 {% block titulo %}
-Dashboard
+Dashboard InventarioPro
 {% endblock %}
-
 
 {% block contenido %}
 
-<h2 class="mb-4">
-    📊 Dashboard InventarioPro
-</h2>
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<div class="container-fluid py-4">
+
+     {% include "dashboard/_header.html" %}
+
+     {% include "dashboard/_filtros.html" %}
+
+     {% include "dashboard/_kpis.html" %}
+
+     {% include "dashboard/_graficos.html" %}
+
+   <div class="row mt-4">
 
 
-<!-- =========================
-     TARJETAS PRINCIPALES
-========================== -->
-
-<div class="row g-4">
+    <div class="col-lg-9">
 
 
-    <div class="col-lg-3 col-md-6">
-        <div class="card shadow border-0 bg-primary text-white">
-            <div class="card-body text-center">
-
-                <h5>📦 Productos</h5>
-
-                <h1>
-                    {{ datos.productos }}
-                </h1>
-
-            </div>
-        </div>
-    </div>
+        {% include "dashboard/_alertas.html" %}
 
 
-
-    <div class="col-lg-3 col-md-6">
-        <div class="card shadow border-0 bg-success text-white">
-            <div class="card-body text-center">
-
-                <h5>💰 Ventas Hoy</h5>
-
-                <h2>
-                    ${{ "{:,.0f}".format(ventas_dia).replace(",", ".") }}
-                </h2>
-
-            </div>
-        </div>
-    </div>
+        {% include "dashboard/_actividad.html" %}
 
 
-
-    <div class="col-lg-3 col-md-6">
-        <div class="card shadow border-0 bg-dark text-white">
-            <div class="card-body text-center">
-
-                <h5>📈 Ventas Mes</h5>
-
-                <h2>
-                    ${{ "{:,.0f}".format(ventas_mes).replace(",", ".") }}
-                </h2>
-
-            </div>
-        </div>
-    </div>
+        {% include "dashboard/_tablas.html" %}
 
 
-
-    <div class="col-lg-3 col-md-6">
-        <div class="card shadow border-0 bg-danger text-white">
-            <div class="card-body text-center">
-
-                <h5>⚠️ Stock Bajo</h5>
-
-                <h1>
-                    {{ datos.stock_bajo }}
-                </h1>
-
-            </div>
-        </div>
-    </div>
-
-
-</div>
-
-
-
-
-<div class="row mt-4">
-
-
-    <div class="col-md-4">
-
-        <div class="card shadow border-0 bg-warning">
-
-            <div class="card-body text-center">
-
-                <h5>
-                    📦 Valor Inventario
-                </h5>
-
-
-                <h2>
-
-                    ${{ "{:,.0f}".format(valor).replace(",", ".") }}
-
-                </h2>
-
-
-            </div>
-
-        </div>
 
     </div>
 
 
 
-    <div class="col-md-4">
 
-        <div class="card shadow">
+    <div class="col-lg-3">
 
-            <div class="card-body text-center">
 
-                <h5>
-                    📂 Categorías
-                </h5>
+        {% include "dashboard/_usuario.html" %}
 
-                <h1>
-                    {{ datos.categorias }}
-                </h1>
 
-            </div>
-
-        </div>
 
     </div>
 
 
 
-    <div class="col-md-4">
-
-        <div class="card shadow">
-
-            <div class="card-body text-center">
-
-                <h5>
-                    🏷️ Marcas
-                </h5>
-
-                <h1>
-                    {{ datos.marcas }}
-                </h1>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
 </div>
 
-
-
-
-
-<hr class="my-4">
-
-
-
-
-
-<div class="row">
-
-
-<div class="col-md-8">
-
-
-<div class="card shadow">
-
-
-<div class="card-header">
-
-📈 Productos por categoría
-
 </div>
-
-
-<div class="card-body">
-
-<canvas id="graficoCategorias"></canvas>
-
-
-<hr>
-
-
-<h5>
-📥 Entradas vs 📤 Salidas
-</h5>
-
-
-<canvas id="graficoMovimientos"></canvas>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="col-md-4">
-
-
-<div class="card shadow">
-
-
-<div class="card-header">
-
-👤 Sesión
-
-</div>
-
-
-<div class="card-body">
-
-
-<p>
-<strong>Usuario:</strong>
-{{ usuario }}
-</p>
-
-
-<p>
-<strong>Rol:</strong>
-{{ rol }}
-</p>
-
-
-<span class="badge bg-success">
-Activo
-</span>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- =========================
-     PRODUCTOS MAS VENDIDOS
-========================== -->
-
-
-<div class="card shadow mt-4">
-
-
-<div class="card-header bg-primary text-white">
-
-🏆 Productos más vendidos
-
-</div>
-
-
-<div class="card-body">
-
-
-<table class="table">
-
-
-<tr>
-
-<th>
-Producto
-</th>
-
-<th>
-Cantidad
-</th>
-
-</tr>
-
-
-
-{% for producto in mas_vendidos %}
-
-<tr>
-
-<td>
-{{ producto[0] }}
-</td>
-
-
-<td>
-
-<span class="badge bg-success">
-
-{{ producto[1] }}
-
-</span>
-
-</td>
-
-
-</tr>
-
-
-{% else %}
-
-<tr>
-
-<td colspan="2" class="text-center">
-
-Sin ventas registradas
-
-</td>
-
-</tr>
-
-
-{% endfor %}
-
-
-
-</table>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- =========================
-     ULTIMAS VENTAS
-========================== -->
-
-
-<div class="card shadow mt-4">
-
-
-<div class="card-header bg-success text-white">
-
-🧾 Últimas ventas
-
-</div>
-
-
-
-<div class="card-body">
-
-
-<table class="table table-striped">
-
-
-<tr>
-
-<th>
-Folio
-</th>
-
-<th>
-Cliente
-</th>
-
-<th>
-Total
-</th>
-
-<th>
-Fecha
-</th>
-
-
-</tr>
-
-
-
-{% for venta in ultimas %}
-
-
-<tr>
-
-<td>
-{{ venta[1] }}
-</td>
-
-
-<td>
-{{ venta[2] }}
-</td>
-
-
-<td>
-
-${{ "{:,.0f}".format(venta[3]).replace(",", ".") }}
-
-</td>
-
-
-<td>
-{{ venta[4] }}
-</td>
-
-
-</tr>
-
-
-{% endfor %}
-
-
-</table>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- =========================
-     STOCK BAJO
-========================== -->
-
-
-<div class="card shadow mt-4">
-
-
-<div class="card-header bg-danger text-white">
-
-⚠️ Productos con stock bajo
-
-</div>
-
-
-<div class="card-body">
-
-
-<table class="table table-striped">
-
-
-<tr>
-
-<th>
-Producto
-</th>
-
-<th>
-Stock
-</th>
-
-
-</tr>
-
-
-
-{% for producto in stock_bajo %}
-
-
-<tr>
-
-
-<td>
-{{ producto[0] }}
-</td>
-
-
-<td>
-
-<span class="badge bg-danger">
-
-{{ producto[1] }}
-
-</span>
-
-
-</td>
-
-
-</tr>
-
-
-
-{% else %}
-
-
-<tr>
-
-<td colspan="2" class="text-center">
-
-✅ Stock correcto
-
-</td>
-
-
-</tr>
-
-
-{% endfor %}
-
-
-
-</table>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
 <script>
 
+const categorias = {{ categorias|tojson }};
 
-new Chart(
-document.getElementById("graficoCategorias"),
-{
+const movimientos = {{ movimientos|tojson }};
 
-type:"bar",
+const ventas7dias = {{ grafico_ventas|tojson }};
 
-data:{
+const comparativo = {{ comparativo|tojson }};
 
-labels:[
-
-{% for categoria in categorias %}
-"{{ categoria[0] }}",
-{% endfor %}
-
-],
-
-
-datasets:[{
-
-label:"Productos",
-
-data:[
-
-{% for categoria in categorias %}
-{{ categoria[1] }},
-{% endfor %}
-
-]
-
-}]
-
-}
-
-}
-
-);
-
-
-
-
-
-new Chart(
-document.getElementById("graficoMovimientos"),
-{
-
-type:"pie",
-
-data:{
-
-labels:[
-
-{% for movimiento in movimientos %}
-"{{ movimiento[0] }}",
-{% endfor %}
-
-],
-
-
-datasets:[{
-
-data:[
-
-{% for movimiento in movimientos %}
-{{ movimiento[1] }},
-{% endfor %}
-
-]
-
-}]
-
-}
-
-}
-
-);
-
-
+const ganancias = {{ ganancias|tojson }};
 
 </script>
 
-
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
 {% endblock %}

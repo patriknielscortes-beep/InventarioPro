@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+Configuración Empresa
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                ⚙️ Configuración Empresa
+
+            </h2>
+
+
+            <p class="text-muted">
+
+                Administra los datos generales de InventarioPro.
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="card shadow border-0">
+
+
+        <div class="card-header bg-dark text-white">
+
+
+            <h5 class="mb-0">
+
+                🏢 Datos de la empresa
+
+            </h5>
+
+
+        </div>
+
+
+
+
+        <div class="card-body">
+
+
+
+            <form method="POST"
+                  action="/configuracion/guardar">
+
+
+
+
+
+                <div class="row">
+
+
+
+                    <!-- LOGO -->
+
+
+                    <div class="col-md-3 text-center mb-4">
+
+
+                        <h6 class="fw-bold">
+
+                            Logo Empresa
+
+                        </h6>
+
+
+
+                        <img
+
+                        src="{{ url_for('static',
+                        filename='img/' + empresa.logo) }}"
+
+                        class="rounded shadow mb-3"
+
+                        width="150"
+
+                        height="150"
+
+                        style="object-fit:contain;">
+
+
+
+                        <input
+
+                        type="text"
+
+                        class="form-control"
+
+                        name="logo"
+
+                        value="{{ empresa.logo }}">
+
+
+
+                    </div>
+
+
+
+
+
+
+                    <!-- DATOS -->
+
+
+                    <div class="col-md-9">
+
+
+
+                        <div class="row">
+
+
+
+                            <div class="col-md-6 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Nombre Empresa
+
+                                </label>
+
+
+                                <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="nombre"
+
+                                value="{{ empresa.nombre }}"
+
+                                required>
+
+
+                            </div>
+
+
+
+
+
+
+                            <div class="col-md-6 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    RUT
+
+                                </label>
+
+
+                                <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="rut"
+
+                                value="{{ empresa.rut }}">
+
+
+                            </div>
+
+
+
+
+
+
+                            <div class="col-md-12 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Giro
+
+                                </label>
+
+
+                                <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="giro"
+
+                                value="{{ empresa.giro }}">
+
+
+                            </div>
+
+
+
+
+
+
+                            <div class="col-md-8 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Dirección
+
+                                </label>
+
+
+                                <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="direccion"
+
+                                value="{{ empresa.direccion }}">
+
+
+                            </div>
+
+
+
+
+
+
+                            <div class="col-md-4 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Comuna
+
+                                </label>
+
+
+                                <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="comuna"
+
+                                value="{{ empresa.comuna }}">
+
+
+                            </div>
+
+
+
+
+
+
+
+                            <div class="col-md-6 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Teléfono
+
+                                </label>
+
+
+                                <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="telefono"
+
+                                value="{{ empresa.telefono }}">
+
+
+                            </div>
+
+
+
+
+
+
+
+                            <div class="col-md-6 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Correo
+
+                                </label>
+
+
+                                <input
+
+                                type="email"
+
+                                class="form-control"
+
+                                name="email"
+
+                                value="{{ empresa.email }}">
+
+
+                            </div>
+
+
+
+
+
+
+                            <div class="col-md-6 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    Moneda
+
+                                </label>
+
+
+                                <select
+
+                                class="form-select"
+
+                                name="moneda">
+
+
+                                    <option
+                                    {% if empresa.moneda=="Peso Chileno" %}
+                                    selected
+                                    {% endif %}>
+                                    Peso Chileno
+                                    </option>
+
+
+
+                                    <option
+                                    {% if empresa.moneda=="Dólar" %}
+                                    selected
+                                    {% endif %}>
+                                    Dólar
+                                    </option>
+
+
+                                </select>
+
+
+                            </div>
+
+
+
+
+
+
+
+                            <div class="col-md-6 mb-3">
+
+
+                                <label class="form-label fw-bold">
+
+                                    IVA %
+
+                                </label>
+
+
+                                <input
+
+                                type="number"
+
+                                class="form-control"
+
+                                name="iva"
+
+                                value="{{ empresa.iva }}">
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+                <hr>
+
+
+
+
+                <div class="text-end">
+
+
+                    <button class="btn btn-success px-4">
+
+
+                        💾 Guardar Cambios
+
+
+                    </button>
+
+
+                </div>
+
+
+
+
+            </form>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

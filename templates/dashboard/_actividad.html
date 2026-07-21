@@ -1,0 +1,144 @@
+<!-- ==========================================
+     ACTIVIDAD RECIENTE
+========================================== -->
+
+
+<div class="dashboard-panel mb-4">
+
+
+    <div class="panel-header">
+
+        <h5>
+            📌 Actividad reciente
+        </h5>
+
+    </div>
+
+
+
+    <div class="activity-list">
+
+
+
+        <!-- Producto -->
+
+        <div class="activity-item">
+
+
+            <div class="activity-icon">
+
+                📦
+
+            </div>
+
+
+            <div class="activity-content">
+
+
+                <strong>
+                    Último producto registrado
+                </strong>
+
+
+                <span>
+
+                    {{ ultimo_producto }}
+
+                </span>
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+        <!-- Cliente -->
+
+        <div class="activity-item">
+
+
+            <div class="activity-icon">
+
+                👤
+
+            </div>
+
+
+            <div class="activity-content">
+
+
+                <strong>
+                    Último cliente registrado
+                </strong>
+
+
+                <span>
+
+                    {{ ultimo_cliente }}
+
+                </span>
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+        <!-- Compra -->
+
+        <div class="activity-item">
+
+
+            <div class="activity-icon">
+
+                🛒
+
+            </div>
+
+
+            <div class="activity-content">
+
+
+                <strong>
+                    Última compra
+                </strong>
+
+
+                <span>
+
+                    {% if ultima_compra %}
+
+                        ${{ "{:,.0f}".format(ultima_compra).replace(",", ".") }}
+
+                    {% else %}
+
+                        $0
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>

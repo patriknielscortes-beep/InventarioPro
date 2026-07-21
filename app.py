@@ -9,13 +9,14 @@ from blueprints.movimientos import movimientos
 from blueprints.proveedores import proveedores
 from blueprints.compras import compras
 from blueprints.usuarios import usuarios
+from blueprints.perfil import perfil
 from blueprints.ventas import ventas
 from blueprints.clientes import clientes
 from blueprints.pos import pos
 from blueprints.auditoria import auditoria
 from blueprints.reportes import reportes
 from blueprints.envios import envios
-
+from blueprints.configuracion import configuracion
 
 
 app = Flask(__name__)
@@ -33,12 +34,14 @@ app.register_blueprint(movimientos)
 app.register_blueprint(proveedores)
 app.register_blueprint(compras)
 app.register_blueprint(usuarios)
+app.register_blueprint(perfil)
 app.register_blueprint(ventas)
 app.register_blueprint(clientes)
 app.register_blueprint(pos)
 app.register_blueprint(auditoria)
 app.register_blueprint(reportes)
 app.register_blueprint(envios)
+app.register_blueprint(configuracion)
 
 
 

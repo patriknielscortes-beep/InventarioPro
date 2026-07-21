@@ -1,0 +1,82 @@
+<!-- ==========================================
+     ALERTAS INVENTARIO
+========================================== -->
+
+
+<div class="dashboard-panel mb-4">
+
+
+    <div class="panel-header">
+
+        <h5>
+            🚨 Alertas de Inventario
+        </h5>
+
+    </div>
+
+
+
+    {% if datos.stock_bajo > 0 %}
+
+
+        <div class="alert alert-warning">
+
+            ⚠️
+
+            Hay
+
+            <strong>
+                {{ datos.stock_bajo }}
+            </strong>
+
+            productos con stock bajo.
+
+        </div>
+
+
+    {% endif %}
+
+
+
+
+    {% if agotados_lista %}
+
+
+        {% for producto in agotados_lista %}
+
+
+        <div class="alert alert-danger">
+
+
+            🚨
+
+            <strong>
+                {{ producto[0] }}
+            </strong>
+
+            está agotado.
+
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+
+    {% else %}
+
+
+        <div class="alert alert-success">
+
+            ✅ No hay productos agotados.
+
+        </div>
+
+
+    {% endif %}
+
+
+
+</div>

@@ -1,0 +1,50 @@
+<!-- ==========================================
+     NOTIFICACIONES
+========================================== -->
+
+
+<div class="dashboard-panel mb-4">
+
+
+    <div class="panel-header">
+
+        <h5>
+            🔔 Notificaciones
+        </h5>
+
+    </div>
+
+
+
+    {% if notificaciones %}
+
+
+        {% for aviso in notificaciones %}
+
+
+        <div class="alert alert-{{ aviso.tipo }}">
+
+            {{ aviso.icono }}
+
+            {{ aviso.mensaje }}
+
+        </div>
+
+
+        {% endfor %}
+
+
+
+    {% else %}
+
+
+        <p class="text-muted">
+
+            No hay notificaciones
+
+        </p>
+
+
+    {% endif %}
+
+</div>

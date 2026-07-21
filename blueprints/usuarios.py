@@ -3,7 +3,7 @@ from utils.helpers import login_required, role_required
 
 from models.usuario_admin_model import (
     listar_usuarios,
-    buscar_usuario,
+    buscar_usuario_id,
     crear_usuario,
     editar_usuario,
     eliminar_usuario,
@@ -71,7 +71,7 @@ def guardar():
 @role_required("Administrador")
 def editar(id):
 
-    usuario = buscar_usuario(id)
+    usuario = buscar_usuario_id(id)
 
     return render_template(
         "editar_usuario.html",

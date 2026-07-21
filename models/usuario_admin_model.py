@@ -141,9 +141,7 @@ def cambiar_password(id, password):
 
     cursor.execute("""
         UPDATE usuarios
-
         SET password = ?
-
         WHERE id = ?
     """,
     (
@@ -155,6 +153,27 @@ def cambiar_password(id, password):
 
     conexion.close()
 
+
+
+def cambiar_estado(id, estado):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        UPDATE usuarios
+        SET estado = ?
+        WHERE id = ?
+    """,
+    (
+        estado,
+        id
+    ))
+
+    conexion.commit()
+
+    conexion.close()
 
 # ==========================================
 # CAMBIAR ESTADO
@@ -201,3 +220,82 @@ def eliminar_usuario(id):
     conexion.commit()
 
     conexion.close()
+
+# ==========================================
+# CAMBIAR PASSWORD
+# ==========================================
+
+def cambiar_password(id, password):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    password_hash = generate_password_hash(password)
+
+    cursor.execute("""
+        UPDATE usuarios
+        SET password = ?
+        WHERE id = ?
+    """,
+    (
+        password_hash,
+        id
+    ))
+
+    conexion.commit()
+
+    conexion.close()
+
+
+
+# ==========================================
+# CAMBIAR ESTADO
+# ==========================================
+
+def cambiar_estado(id, estado):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        UPDATE usuarios
+        SET estado = ?
+        WHERE id = ?
+    """,
+    (
+        estado,
+        id
+    ))
+
+    conexion.commit()
+
+    conexion.close()
+
+    # ==========================================
+# BUSCAR USUARIO POR ID
+# ==========================================
+
+def buscar_usuario_id(id):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT *
+        FROM usuarios
+        WHERE id = ?
+    """,
+    (id,))
+
+
+    usuario = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return usuario

@@ -1,5 +1,6 @@
 import sqlite3
 from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 DATABASE = "inventario.db"
@@ -171,3 +172,87 @@ def eliminar_usuario(id):
     conexion.commit()
 
     conexion.close()
+
+    # ==========================================
+# ACTUALIZAR FOTO PERFIL
+# ==========================================
+
+def actualizar_foto(usuario, foto):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        UPDATE usuarios
+        SET foto = ?
+        WHERE usuario = ?
+    """,
+    (
+        foto,
+        usuario
+    ))
+
+    conexion.commit()
+
+    conexion.close()
+
+
+# ==========================================
+# CAMBIAR CONTRASEÑA
+# ==========================================
+
+def cambiar_password(usuario, password_actual, password_nueva):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT password
+        FROM usuarios
+        WHERE usuario = ?
+    """,
+    (usuario,))
+
+
+    datos = cursor.fetchone()
+
+
+
+    if not datos:
+
+        conexion.close()
+        return False
+
+
+
+    if not check_password_hash(datos["password"], password_actual):
+
+        conexion.close()
+        return False
+
+
+
+    nueva = generate_password_hash(password_nueva)
+
+
+
+    cursor.execute("""
+        UPDATE usuarios
+        SET password = ?
+        WHERE usuario = ?
+    """,
+    (
+        nueva,
+        usuario
+    ))
+
+
+    conexion.commit()
+
+    conexion.close()
+
+
+    return True

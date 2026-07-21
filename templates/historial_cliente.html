@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+
+{% block titulo %}
+
+Historial Cliente
+
+{% endblock %}
+
+
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <h2>
+
+            👤 Historial de Cliente
+
+        </h2>
+
+
+        <a href="/clientes" class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Volver
+
+        </a>
+
+
+    </div>
+
+
+
+
+
+    <!-- DATOS CLIENTE -->
+
+
+    <div class="card shadow mb-4">
+
+
+        <div class="card-header bg-primary text-white">
+
+
+            Información del cliente
+
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+            <div class="row">
+
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Nombre:
+                    </strong>
+
+                    {{ cliente.nombre }}
+
+                </div>
+
+
+
+                <div class="col-md-4">
+
+                    <strong>
+                        RUT:
+                    </strong>
+
+                    {{ cliente.rut }}
+
+                </div>
+
+
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Email:
+                    </strong>
+
+                    {{ cliente.email }}
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <!-- RESUMEN -->
+
+
+    <div class="row mb-4">
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow bg-success text-white">
+
+
+                <div class="card-body text-center">
+
+
+                    <h5>
+
+                        🧾 Compras realizadas
+
+                    </h5>
+
+
+
+                    <h1>
+
+                        {{ resumen[0] }}
+
+                    </h1>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow bg-info text-white">
+
+
+                <div class="card-body text-center">
+
+
+                    <h5>
+
+                        💰 Total comprado
+
+                    </h5>
+
+
+
+                    <h1>
+
+                        ${{ "{:,.0f}".format(resumen[1]).replace(",", ".") }}
+
+                    </h1>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <!-- HISTORIAL -->
+
+
+    <div class="card shadow">
+
+
+        <div class="card-header bg-dark text-white">
+
+
+            📋 Compras del cliente
+
+
+        </div>
+
+
+
+
+        <div class="card-body">
+
+
+
+            <table class="table table-striped">
+
+
+                <thead class="table-dark">
+
+
+                    <tr>
+
+
+                        <th>
+                            ID
+                        </th>
+
+
+                        <th>
+                            Folio
+                        </th>
+
+
+                        <th>
+                            Total
+                        </th>
+
+
+                        <th>
+                            Fecha
+                        </th>
+
+
+                        <th>
+                            Forma Pago
+                        </th>
+
+                        <th>
+                            Acción
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+
+                <tbody>
+
+
+
+                {% for venta in compras %}
+
+
+
+                    <tr>
+
+
+                        <td>
+
+                            {{ venta.id }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ venta.folio }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            ${{ "{:,.0f}".format(venta.total).replace(",", ".") }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ venta.fecha }}
+
+                        </td>
+
+
+
+                        <td>
+
+                            {{ venta.forma_pago }}
+
+                        </td>
+
+                        <td>
+
+
+                    <a href="{{ url_for('ventas.comprobante', id=venta.id) }}"
+                    class="btn btn-primary btn-sm"
+                    target="_blank">
+
+                    <i class="bi bi-receipt"></i>
+
+                    Ver boleta
+
+                    </a>
+
+                    <a href="{{ url_for('ventas.enviar_correo', id=venta.id) }}"
+                    class="btn btn-success btn-sm">
+
+                    <i class="bi bi-envelope"></i>
+
+                    Enviar
+
+                    </a>
+
+
+                    </td>
+
+                    </tr>
+
+
+
+
+                {% else %}
+
+
+
+                    <tr>
+
+
+                        <td colspan="6" class="text-center">
+
+
+                            No existen compras registradas.
+
+
+
+                        </td>
+
+
+                    </tr>
+
+
+
+                {% endfor %}
+
+
+
+                </tbody>
+
+
+            </table>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+</div>
+
+
+
+{% endblock %}

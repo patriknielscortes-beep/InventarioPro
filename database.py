@@ -26,9 +26,10 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
     rol TEXT NOT NULL,
 
-    foto TEXT DEFAULT 'default.png'
+    foto TEXT DEFAULT 'default.png',
 
-)
+    estado TEXT DEFAULT 'Activo'
+
 """)
 
 
@@ -341,13 +342,18 @@ CREATE TABLE IF NOT EXISTS empresa (
 
     telefono TEXT,
 
-    email TEXT
+    email TEXT,
+
+    logo TEXT DEFAULT 'logo.png',
+
+    moneda TEXT DEFAULT 'Peso Chileno',
+
+    iva REAL DEFAULT 19
 
 )
 """)
 
 
-cursor.execute("""
 INSERT OR IGNORE INTO empresa
 (
     id,
@@ -357,7 +363,10 @@ INSERT OR IGNORE INTO empresa
     direccion,
     comuna,
     telefono,
-    email
+    email,
+    logo,
+    moneda,
+    iva
 )
 VALUES
 (
@@ -368,9 +377,11 @@ VALUES
     'Coquimbo',
     'Coquimbo',
     '+56 9 1234 5678',
-    'contacto@inventariopro.cl'
+    'contacto@inventariopro.cl',
+    'logo.png',
+    'Peso Chileno',
+    19
 )
-""")
 
 
 # ==========================================

@@ -24,9 +24,27 @@
 
 
 
+        <!-- PERFIL -->
+
+        <li class="nav-item mb-2">
+
+            <a href="/perfil"
+               class="nav-link text-white">
+
+                <i class="bi bi-person-circle"></i>
+                Mi Perfil
+
+            </a>
+
+        </li>
+
+
+
+
         <!-- ADMINISTRADOR -->
 
-        {% if session["rol"] == "Administrador" %}
+        {% if session.get("rol") == "Administrador" %}
+
 
 
         <li class="nav-item mb-2">
@@ -42,6 +60,7 @@
         </li>
 
 
+
         <li class="nav-item mb-2">
 
             <a href="/productos"
@@ -54,34 +73,7 @@
 
         </li>
 
-        {% if session["rol"] == "Administrador" %}
 
-        <li class="nav-item">
-
-            <a class="nav-link" href="{{ url_for('auditoria.lista') }}">
-
-                <i class="bi bi-clipboard-data"></i>
-
-                Auditoría
-
-            </a>
-
-        </li>
-
-        {% endif %}
-
-
-        <li class="nav-item mb-2">
-
-            <a href="/movimientos"
-               class="nav-link text-white">
-
-                <i class="bi bi-arrow-left-right"></i>
-                Movimientos
-
-            </a>
-
-        </li>
 
 
         <li class="nav-item mb-2">
@@ -97,6 +89,8 @@
         </li>
 
 
+
+
         <li class="nav-item mb-2">
 
             <a href="/marcas"
@@ -108,6 +102,8 @@
             </a>
 
         </li>
+
+
 
 
         <li class="nav-item mb-2">
@@ -123,6 +119,8 @@
         </li>
 
 
+
+
         <li class="nav-item mb-2">
 
             <a href="/compras"
@@ -136,26 +134,70 @@
         </li>
 
 
+
+
         <li class="nav-item mb-2">
 
-            <a href="/salidas"
+            <a href="/movimientos"
                class="nav-link text-white">
 
-                <i class="bi bi-box-arrow-up"></i>
-                Salidas
+                <i class="bi bi-arrow-left-right"></i>
+                Movimientos
 
             </a>
 
         </li>
 
 
+
+
+        <!-- AUDITORIA -->
+
+        <li class="nav-item mb-2">
+
+            <a href="{{ url_for('auditoria.lista') }}"
+               class="nav-link text-white">
+
+                <i class="bi bi-clipboard-data"></i>
+                Auditoría
+
+            </a>
+
+        </li>
+
+
+
+
+
+        <!-- CONFIGURACION -->
+
+        <li class="nav-item mb-2">
+
+            <a href="/configuracion"
+               class="nav-link text-white">
+
+                <i class="bi bi-gear-fill"></i>
+                Configuración
+
+            </a>
+
+        </li>
+
+
+
         {% endif %}
+
+
+
 
 
 
         <!-- ADMINISTRADOR Y VENDEDOR -->
 
-        {% if session["rol"] in ["Administrador", "Vendedor"] %}
+
+        {% if session.get("rol") in ["Administrador", "Vendedor"] %}
+
+
 
 
         <li class="nav-item mb-2">
@@ -170,17 +212,6 @@
 
         </li>
 
-        <li class="nav-item">
-
-            <a href="/envios" class="nav-link">
-
-                <i class="bi bi-envelope-fill"></i>
-
-                Historial Correos
-
-            </a>
-
-        </li>
 
 
 
@@ -198,6 +229,7 @@
 
 
 
+
         <li class="nav-item mb-2">
 
             <a href="/clientes"
@@ -211,15 +243,21 @@
         </li>
 
 
+
         {% endif %}
 
 
 
-        <hr>
+
+
+        <hr class="text-secondary">
+
+
 
 
 
         <!-- CERRAR SESION -->
+
 
         <li class="nav-item">
 
@@ -232,6 +270,7 @@
             </a>
 
         </li>
+
 
 
     </ul>

@@ -3,32 +3,47 @@
     <div class="container-fluid">
 
 
-        <span class="navbar-brand">
+        <span class="navbar-brand fw-bold">
 
-            Panel de Control
+            📊 Panel de Control
 
         </span>
+
 
 
         <div class="d-flex align-items-center">
 
 
-            <span class="me-3">
+            <!-- PERFIL USUARIO -->
 
-                👤 {{ session["usuario"] }}
+                <div class="d-flex align-items-center gap-3">
 
-            </span>
-
-
-            <span class="badge bg-primary">
-
-                {{ session["rol"] }}
-
-            </span>
+                    <img
+                    src="{{ url_for('static', filename='perfiles/' + session.get('foto','default.png')) }}"
+                    class="rounded-circle shadow"
+                    width="55"
+                    height="55"
+                    style="object-fit: cover;">
 
 
-        </div>
+                    <div>
 
+                        <h6 class="mb-0 fw-bold">
+                            {{ session.get('nombre','Usuario') }}
+                        </h6>
+
+
+                        <span class="badge bg-primary">
+
+                            <i class="bi bi-shield-check"></i>
+
+                            {{ session.get('rol','') }}
+
+                        </span>
+
+                    </div>
+
+                </div>
 
     </div>
 

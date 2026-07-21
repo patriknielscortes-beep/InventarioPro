@@ -1,0 +1,280 @@
+<!-- =======================================================
+     KPIs PRINCIPALES ERP
+======================================================= -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- PRODUCTOS -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-blue">
+
+            <div class="card-body">
+
+                <div class="kpi-icon">
+                    📦
+                </div>
+
+                <h2 class="contador"
+                    data-valor="{{ datos.productos }}">
+                    0
+                </h2>
+
+                <p>
+                    Productos
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CLIENTES -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-cyan">
+
+            <div class="card-body">
+
+                <div class="kpi-icon">
+                    👥
+                </div>
+
+
+                <h2 class="contador"
+                    data-valor="{{ clientes_total }}">
+                    0
+                </h2>
+
+
+                <p>
+                    Clientes
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <!-- VENTAS MES -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-green">
+
+            <div class="card-body">
+
+                <div class="kpi-icon">
+                    💰
+                </div>
+
+
+                <h2>
+
+                    {{ "{:,.0f}".format(ventas_mes|float).replace(",", ".") }}
+
+                </h2>
+
+
+                <p>
+                    Ventas del Mes
+                </p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <!-- COMPRAS -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-orange">
+
+            <div class="card-body">
+
+
+                <div class="kpi-icon">
+                    🛒
+                </div>
+
+
+                <h2>
+
+                    {{ "{:,.0f}".format(compras|float).replace(",", ".") }}
+
+                </h2>
+
+
+                <p>
+                    Compras del Mes
+                </p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <!-- VENTAS REGISTRADAS -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-purple">
+
+
+            <div class="card-body">
+
+
+                <div class="kpi-icon">
+                    🧾
+                </div>
+
+
+                <h2 class="contador"
+                    data-valor="{{ ventas_total }}">
+                    0
+                </h2>
+
+
+                <p>
+                    Ventas Registradas
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- STOCK BAJO -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-red">
+
+
+            <div class="card-body">
+
+
+                <div class="kpi-icon">
+                    ⚠️
+                </div>
+
+
+                <h2 class="contador"
+                    data-valor="{{ datos.stock_bajo }}">
+                    0
+                </h2>
+
+
+                <p>
+                    Stock Bajo
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- AGOTADOS -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-dark">
+
+
+            <div class="card-body">
+
+
+                <div class="kpi-icon">
+                    🚨
+                </div>
+
+
+                <h2 class="contador"
+                    data-valor="{{ agotados }}">
+                    0
+                </h2>
+
+
+                <p>
+                    Agotados
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- VALOR INVENTARIO -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card kpi-light">
+
+
+            <div class="card-body">
+
+
+                <div class="kpi-icon">
+                    🏪
+                </div>
+
+
+                <h2>
+
+                    {{ "{:,.0f}".format(valor|float).replace(",", ".") }}
+
+                </h2>
+
+
+                <p>
+                    Valor Inventario
+                </p>
+
+
+            </div>
+            
+        </div>
+
+    </div>
+
+</div>

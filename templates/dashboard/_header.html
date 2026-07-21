@@ -1,0 +1,93 @@
+<!-- ==========================================================
+     HEADER DASHBOARD ERP
+=========================================================== -->
+
+<div class="dashboard-header mb-4">
+
+
+    <div class="header-content">
+
+
+        <div class="header-title">
+
+
+            <h2>
+                📊 Dashboard InventarioPro
+            </h2>
+
+
+            <p>
+                Bienvenido
+                <strong>{{ usuario }}</strong>.
+                Gestión general del sistema.
+            </p>
+
+
+        </div>
+
+
+
+
+
+        <div class="header-info">
+
+
+            <div class="status-online">
+
+                <span class="pulse"></span>
+
+                Sistema En línea
+
+            </div>
+
+
+
+
+            <div class="header-item">
+
+                <span>
+                    👤 Rol:
+                </span>
+
+
+                <strong>
+                    {{ rol }}
+                </strong>
+
+            </div>
+
+
+
+
+            <div class="header-item">
+
+                <span>
+                    🕒 Hora:
+                </span>
+
+
+                <strong id="reloj">
+                    --:--:--
+                </strong>
+
+            </div>
+
+            <div class="mt-3">
+
+                    <a href="/dashboard/pdf"
+                    class="btn btn-danger">
+
+                    📄 Exportar PDF
+
+                    </a>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>

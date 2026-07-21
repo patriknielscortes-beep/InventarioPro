@@ -1,0 +1,113 @@
+<!-- =======================================================
+     USUARIO CONECTADO
+======================================================= -->
+
+
+<div class="dashboard-panel user-panel">
+
+
+    <div class="panel-header">
+
+        <h5>
+            👤 Usuario conectado
+        </h5>
+
+    </div>
+
+
+
+    <div class="user-profile">
+
+
+        <div class="user-avatar">
+
+
+            {% if usuario_info and usuario_info[3] %}
+
+
+                <img src="{{ url_for('static',
+                filename='img/usuarios/' + usuario_info[3]) }}"
+                class="rounded-circle"
+                width="90"
+                height="90">
+
+
+            {% else %}
+
+
+                👤
+
+
+            {% endif %}
+
+
+
+        </div>
+
+
+
+
+
+        <h4>
+
+            {{ usuario_info[0] if usuario_info else usuario }}
+
+        </h4>
+
+
+
+        <span class="user-role">
+
+            {{ usuario_info[2] if usuario_info else rol }}
+
+        </span>
+
+
+
+
+
+        <div class="mt-3">
+
+
+            <strong>
+                Usuario:
+            </strong>
+
+            <br>
+
+            {{ usuario_info[1] if usuario_info else usuario }}
+
+
+        </div>
+
+
+
+
+
+        <div class="user-status">
+
+
+            {% if usuario_info and usuario_info[4]=="Activo" %}
+
+
+                🟢 Cuenta activa
+
+
+            {% else %}
+
+
+                🔴 Cuenta inactiva
+
+
+            {% endif %}
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>

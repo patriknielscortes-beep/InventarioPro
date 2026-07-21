@@ -1,0 +1,369 @@
+<!-- ==========================================
+     TABLAS DASHBOARD ERP
+========================================== -->
+
+
+<!-- PRODUCTOS MÁS VENDIDOS -->
+
+<div class="dashboard-panel mb-4">
+
+
+    <div class="panel-header">
+
+        <h5>
+            📦 Productos más vendidos
+        </h5>
+
+    </div>
+
+
+
+    <div class="table-responsive">
+
+
+        <table class="table align-middle">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Producto
+                    </th>
+
+                    <th class="text-end">
+                        Cantidad
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+
+            {% if mas_vendidos %}
+
+
+                {% for producto in mas_vendidos %}
+
+
+                <tr>
+
+
+                    <td>
+
+                        📦 {{ producto[0] }}
+
+                    </td>
+
+
+                    <td class="text-end">
+
+                        <span class="badge bg-primary">
+
+                            {{ producto[1] }}
+
+                        </span>
+
+                    </td>
+
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <tr>
+
+                    <td colspan="2"
+                        class="text-center text-muted">
+
+                        Sin ventas registradas
+
+                    </td>
+
+                </tr>
+
+
+            {% endif %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- ÚLTIMAS VENTAS -->
+
+
+<div class="dashboard-panel mb-4">
+
+
+    <div class="panel-header">
+
+        <h5>
+
+            🛒 Últimas ventas
+
+        </h5>
+
+    </div>
+
+
+
+
+    <div class="table-responsive">
+
+
+        <table class="table align-middle">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Cliente</th>
+
+                    <th>Total</th>
+
+                    <th>Fecha</th>
+
+
+                </tr>
+
+
+            </thead>
+
+
+
+            <tbody>
+
+
+            {% if ultimas %}
+
+
+
+                {% for venta in ultimas %}
+
+
+
+                <tr>
+
+
+                    <td>
+
+                        #{{ venta[0] }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ venta[1] or "Cliente general" }}
+
+                    </td>
+
+
+
+
+                    <td>
+
+                        ${{ "{:,.0f}".format(venta[2]).replace(",", ".") }}
+
+                    </td>
+
+
+
+                    <td>
+
+                        {{ venta[3] }}
+
+                    </td>
+
+
+
+                </tr>
+
+
+
+                {% endfor %}
+
+
+
+            {% else %}
+
+
+
+                <tr>
+
+                    <td colspan="4"
+                        class="text-center text-muted">
+
+                        Sin ventas registradas
+
+                    </td>
+
+                </tr>
+
+
+            {% endif %}
+
+
+
+            </tbody>
+
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- TOP VENDEDORES -->
+
+
+<div class="dashboard-panel mb-4">
+
+
+    <div class="panel-header">
+
+        <h5>
+
+            🏆 Top vendedores
+
+        </h5>
+
+    </div>
+
+
+
+    <div class="table-responsive">
+
+
+        <table class="table align-middle">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Usuario
+                    </th>
+
+                    <th class="text-end">
+                        Vendido
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+
+
+            {% if top_vendedores %}
+
+
+
+                {% for vendedor in top_vendedores %}
+
+
+
+                <tr>
+
+
+                    <td>
+
+                        👤 {{ vendedor[0] }}
+
+                    </td>
+
+
+
+                    <td class="text-end">
+
+                        ${{ "{:,.0f}".format(vendedor[1]).replace(",", ".") }}
+
+                    </td>
+
+
+
+                </tr>
+
+
+
+                {% endfor %}
+
+
+
+            {% else %}
+
+
+
+                <tr>
+
+                    <td colspan="2"
+                        class="text-center text-muted">
+
+                        Sin registros
+
+                    </td>
+
+
+                </tr>
+
+
+
+            {% endif %}
+
+
+
+            </tbody>
+
+
+
+        </table>
+
+
+    </div>
+
+
+</div>

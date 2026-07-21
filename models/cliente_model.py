@@ -196,3 +196,155 @@ def eliminar_cliente(id):
     conexion.commit()
 
     conexion.close()
+
+    # ==========================================
+# BUSCAR CLIENTE POR ID
+# ==========================================
+
+def obtener_cliente(id):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM clientes
+        WHERE id = ?
+    """,
+    (id,))
+
+
+    cliente = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return cliente
+
+
+
+# ==========================================
+# HISTORIAL DE COMPRAS DEL CLIENTE
+# ==========================================
+
+def historial_cliente(cliente):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT
+            id,
+            folio,
+            total,
+            fecha,
+            forma_pago
+
+        FROM ventas
+
+        WHERE cliente = ?
+
+        ORDER BY id DESC
+
+    """,
+    (cliente,))
+
+
+    ventas = cursor.fetchall()
+
+
+    conexion.close()
+
+
+    return ventas
+
+
+
+# ==========================================
+# RESUMEN DE COMPRAS DEL CLIENTE
+# ==========================================
+
+def resumen_cliente(cliente):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT
+
+            COUNT(id),
+            COALESCE(SUM(total),0)
+
+        FROM ventas
+
+        WHERE cliente = ?
+
+    """,
+    (cliente,))
+
+
+    datos = cursor.fetchone()
+
+
+    conexion.close()
+
+
+    return datos
+
+# ==========================================
+# VALIDAR RUT EXISTENTE
+# ==========================================
+
+def buscar_rut(rut):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM clientes
+        WHERE rut = ?
+    """,
+    (rut,))
+
+
+    cliente = cursor.fetchone()
+
+    conexion.close()
+
+
+    return cliente
+
+
+
+# ==========================================
+# VALIDAR EMAIL EXISTENTE
+# ==========================================
+
+def buscar_email(email):
+
+    conexion = conectar()
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM clientes
+        WHERE email = ?
+    """,
+    (email,))
+
+
+    cliente = cursor.fetchone()
+
+    conexion.close()
+
+
+    return cliente

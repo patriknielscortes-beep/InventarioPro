@@ -1,14 +1,20 @@
-from flask import Blueprint, render_template, request, redirect, flash
+from flask import Blueprint, render_template, request, redirect
 
 from models.cliente_model import (
     listar_clientes,
     crear_cliente,
     eliminar_cliente,
     editar_cliente,
-    buscar_email
+    obtener_cliente,
+    historial_cliente,
+    resumen_cliente,
+    buscar_email,
+    buscar_rut
 )
 
 from utils.helpers import login_required, role_required
+from flask import flash
+
 
 
 clientes = Blueprint("clientes", __name__)
@@ -16,7 +22,7 @@ clientes = Blueprint("clientes", __name__)
 
 
 # ==========================================
-# LISTAR
+# LISTAR CLIENTES
 # ==========================================
 
 @clientes.route("/clientes")
@@ -34,7 +40,7 @@ def lista():
 
 
 # ==========================================
-# CREAR
+# CREAR CLIENTE
 # ==========================================
 
 @clientes.route("/clientes/crear", methods=["POST"])
@@ -43,13 +49,15 @@ def lista():
 def crear():
 
 
+    nombre = request.form["nombre"]
+    rut = request.form["rut"]
+    telefono = request.form["telefono"]
     email = request.form["email"]
+    direccion = request.form["direccion"]
 
 
-    existe = buscar_email(email)
 
-
-    if existe:
+    if buscar_email(email):
 
         flash(
             "⚠️ El correo ya está registrado",
@@ -60,18 +68,24 @@ def crear():
 
 
 
+    if rut and buscar_rut(rut):
+
+        flash(
+            "⚠️ El RUT ya está registrado",
+            "warning"
+        )
+
+        return redirect("/clientes")
+
+
+
+
     crear_cliente(
-
-        request.form["nombre"],
-
-        request.form["rut"],
-
-        request.form["telefono"],
-
+        nombre,
+        rut,
+        telefono,
         email,
-
-        request.form["direccion"]
-
+        direccion
     )
 
 
@@ -86,7 +100,7 @@ def crear():
 
 
 # ==========================================
-# EDITAR
+# EDITAR CLIENTE
 # ==========================================
 
 @clientes.route("/clientes/editar/<int:id>", methods=["POST"])
@@ -95,18 +109,15 @@ def crear():
 def editar(id):
 
     editar_cliente(
+
         id,
+
         request.form["nombre"],
         request.form["rut"],
         request.form["telefono"],
         request.form["email"],
         request.form["direccion"]
-    )
 
-
-    flash(
-        "✅ Cliente actualizado",
-        "success"
     )
 
 
@@ -115,7 +126,7 @@ def editar(id):
 
 
 # ==========================================
-# ELIMINAR
+# ELIMINAR CLIENTE
 # ==========================================
 
 @clientes.route("/clientes/eliminar/<int:id>")
@@ -125,11 +136,42 @@ def eliminar(id):
 
     eliminar_cliente(id)
 
+    return redirect("/clientes")
 
-    flash(
-        "🗑️ Cliente eliminado",
-        "success"
+
+
+# ==========================================
+# HISTORIAL DE COMPRAS
+# ==========================================
+
+@clientes.route("/clientes/historial/<int:id>")
+@login_required
+@role_required("Administrador","Vendedor")
+def historial(id):
+
+    cliente = obtener_cliente(id)
+
+
+    if not cliente:
+
+        return redirect("/clientes")
+
+
+
+    compras = historial_cliente(
+        cliente["nombre"]
     )
 
 
-    return redirect("/clientes")
+    resumen = resumen_cliente(
+        cliente["nombre"]
+    )
+
+
+
+    return render_template(
+        "historial_cliente.html",
+        cliente=cliente,
+        compras=compras,
+        resumen=resumen
+    )
